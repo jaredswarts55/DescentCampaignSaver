@@ -1,0 +1,9 @@
+Name,SearchItemType,Value,Quantity,Rules
+Health Potion,Potion,25,3,[a] Flip this card over to choose your hero or an adjacent hero. The hero recovers all [h].
+Stamina Potion,Potion,25,3,Flip this card over during your turn to choose your hero or an adjacent hero. The hero recovers all [f].
+Treasure Chest,Special,0,1,Immediately discard this card to draw 1 random Shop Item card from the current Act's deck.
+Warding Talisman,Item,50,1,Flip this card over after rolling defense dice to add 2 [s] to your results.
+Nothing,Special,0,1,Discard this card.
+Fire Flask,Item,50,1,[a] Flip this card over to make a Ranged attack with this item. | [l] Blast | Ranged Blue and Yellow Die
+Curse Doll,Item,50,1,[a] Flip this card over to discard any 1 Condition card from yourself or an adjacent hero.
+Power Potion,Potion,50,1,Flip this card over to reroll some or all of your dice after performing an attack.

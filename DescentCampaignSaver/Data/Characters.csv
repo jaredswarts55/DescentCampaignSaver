@@ -1,0 +1,9 @@
+Name,ArchType,Speed,MaxHealth,MaxFatigue,Defense,Will,Might,Knowledge,Awareness,Hero Ability,Heroic Feat
+Ashrian,Healer,5,10,4,White,3,2,2,4,,
+Avric Albright,Healer,4,12,4,White,4,2,3,2,,
+Grisban The Thirsty,Warrior,3,14,4,White,3,5,2,1,,
+Jain Fairwood,Scout,5,8,5,White,2,2,3,4,,
+Leoric Of The Book,Mage,4,8,5,White,2,1,5,3,,
+Syndreal,Warrior,4,12,4,White,2,4,3,2,,
+Tomble Burrowell,Scout,4,8,5,White,3,1,2,5,,
+Widow Tarha,Mage,4,10,4,White,3,2,4,2,,
