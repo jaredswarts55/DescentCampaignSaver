@@ -4,7 +4,7 @@
         xmlns:self="clr-namespace:DescentCampaignSaver.Descent"
         xmlns:dcSaver="clr-namespace:DescentCampaignSaver"
         xmlns:my="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
-        Title="Untitled.xml - Descent 2nd Edition Campaign Saver" 
+        Title="Untitled.d2e - Descent 2nd Edition Campaign Saver" 
         Height="442" Width="903" Loaded="Window_Loaded" >
     <Window.Resources>
         <Style x:Key="myListboxStyle">
@@ -65,15 +65,13 @@
                             <Label Content="Character: " Width="100px"/>
                             <ComboBox Width="150px" 
                                       ItemsSource="{Binding Source={x:Static dcSaver:MyResources.descentCharacters}}"  
-                                      Text="Select A Character"
-                                      Sel="{Binding Path=Character}"
+                                      SelectedItem="{Binding Path=Character}"
                                       DisplayMemberPath="Name"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Class: " Width="100px"/>
                             <ComboBox Width="150px" 
                                       ItemsSource="{Binding Source={x:Static dcSaver:MyResources.Classes}}" 
-                                      Text="Select A Class" 
                                       SelectedValue="{Binding Path=Class}" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0 10 0 0">

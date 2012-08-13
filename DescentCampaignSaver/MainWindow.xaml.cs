@@ -99,17 +99,7 @@ namespace DescentCampaignSaver
                                     ShopItems = new ObservableCollection<ShopItem>(),
                                     SearchCardItems = new ObservableCollection<SearchCardItem>(),
                                     PlayerRelics = new ObservableCollection<PlayerRelic>(),
-                                    ClassAbilites = new ObservableCollection<ClassAbility>(),
-                                    Character = new DescentCharacter
-                                                    {
-                                                        Name = "Ashrian",
-                                                        Awareness = 1,
-                                                        Knowledge = 2,
-                                                        MaxFatigue = 5,
-                                                        MaxHealth = 12,
-                                                        Might = 4,
-                                                        Will = 5
-                                                    }
+                                    ClassAbilites = new ObservableCollection<ClassAbility>()
                                 });
             }
             SetPlayers(players);
@@ -223,7 +213,7 @@ namespace DescentCampaignSaver
         private void OpenFunction()
         {
             var ofd = new OpenFileDialog();
-            ofd.Filter = "XML Documents (.xml)|*.xml";
+            ofd.Filter = "D2E Campaigns (.d2e)|*.d2e";
             if (ofd.ShowDialog() == true)
             {
                 players = PlayerSerializer.DeSerialize(ofd.FileName);
@@ -237,7 +227,7 @@ namespace DescentCampaignSaver
             if(CurrentSavePath!=null)
                 this.Title = Path.GetFileName(CurrentSavePath) + " - Descent 2nd Edition Campaign Saver";
             else 
-                this.Title = "Untitled.xml - Descent 2nd Edition Campaign Saver";
+                this.Title = "Untitled.d2e - Descent 2nd Edition Campaign Saver";
         }
 
         private void SaveFunction()
@@ -260,9 +250,9 @@ namespace DescentCampaignSaver
             if (CurrentSavePath != null)
                 sfd.FileName = Path.GetFileNameWithoutExtension(CurrentSavePath);
             else
-                sfd.FileName = "Untitled";
-            sfd.DefaultExt = ".xml";
-            sfd.Filter = "XML Documents (.xml)|*.xml";
+                sfd.FileName = "UntitledCampaign";
+            sfd.DefaultExt = ".d2e";
+            sfd.Filter = "D2E Campaigns (.d2e)|*.d2e";
             if (sfd.ShowDialog() == true)
             {
                 PlayerSerializer.Serialize(players, sfd.FileName);

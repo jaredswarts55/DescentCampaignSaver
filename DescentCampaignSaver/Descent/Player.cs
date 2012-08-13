@@ -24,7 +24,7 @@ namespace DescentCampaignSaver.Descent
         public ObservableCollection<ShopItem> ShopItems { get; set; }
         public ObservableCollection<SearchCardItem> SearchCardItems { get; set; }
         public ObservableCollection<PlayerRelic> PlayerRelics { get; set; }
-        public string Character { get; set; }
-        public string Class { get; set; }
+        public DescentCharacter Character { get; set; }
+        public CharacterClasses? Class { get; set; }
     }
 }
