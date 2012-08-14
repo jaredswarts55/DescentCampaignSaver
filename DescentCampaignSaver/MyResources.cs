@@ -47,8 +47,7 @@
         /// <summary>
         /// The descent characters.
         /// </summary>
-        public static ObservableCollection<DescentCharacter> descentCharacters =
-            new ObservableCollection<DescentCharacter>();
+        public static ObservableCollection<DescentCharacter> descentCharacters = new ObservableCollection<DescentCharacter>();
 
         /// <summary>
         /// The class abilities.
@@ -61,6 +60,11 @@
         public static ObservableCollection<SearchCardItem> searchCards = new ObservableCollection<SearchCardItem>();
 
         /// <summary>
+        /// The overlord relics.
+        /// </summary>
+        public static ObservableCollection<OverlordRelic> overlordRelics = new ObservableCollection<OverlordRelic>();
+
+        /// <summary>
         /// The player relics.
         /// </summary>
         public static ObservableCollection<PlayerRelic> playerRelics = new ObservableCollection<PlayerRelic>();
@@ -69,5 +73,7 @@
         /// The all searchable items.
         /// </summary>
         public static ObservableCollection<ISearchable> allSearchableItems = new ObservableCollection<ISearchable>();
+
+        public static ObservableCollection<ISearchable> overlordSearchableItems = new ObservableCollection<ISearchable>();
     }
 }

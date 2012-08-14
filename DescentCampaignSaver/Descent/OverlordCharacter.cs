@@ -7,8 +7,12 @@
     /// <summary>
     /// The overlord.
     /// </summary>
-    public class Overlord
+    public class OverlordCharacter
     {
+        public string PlayerName { get; set; }
+
+        public int UnspentExp { get; set; }
+
         /// <summary>
         /// Gets or sets the overlord relics.
         /// </summary>

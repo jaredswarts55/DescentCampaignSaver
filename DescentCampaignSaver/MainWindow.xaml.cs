@@ -34,10 +34,11 @@
         /// </summary>
         private string currentSavePath;
 
+        private DescentCampaign campaign = new DescentCampaign();
+
         /// <summary>
         /// The playersToSet.
         /// </summary>
-        private ObservableCollection<Player> players = new ObservableCollection<Player>();
 
         #endregion
 
@@ -54,13 +55,30 @@
         #endregion
 
         #region Methods
+        private void AutoCompleteBoxPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var aBox = (AutoCompleteBox)sender;
+                if (campaign.Overlord != null && aBox.SelectedItem != null)
+                {
+                    if (aBox.SelectedItem is OverlordRelic)
+                        campaign.Overlord.OverlordRelics.Add((OverlordRelic)aBox.SelectedItem);
+                    else if (aBox.SelectedItem is OverlordClassAbility)
+                        campaign.Overlord.OverlordClassAbilities.Add((OverlordClassAbility)aBox.SelectedItem);
+                }
+
+                aBox.SelectedItem = null;
+                aBox.Text = string.Empty;
+            }
+        }
 
         private void AutoCompleteBoxKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 var aBox = (AutoCompleteBox)sender;
-                Player player = this.players.FirstOrDefault(x => x.Name == aBox.Tag.ToString());
+                Player player = this.campaign.Players.FirstOrDefault(x => x.Name == aBox.Tag.ToString());
                 if (player != null && aBox.SelectedItem != null)
                 {
                     if (aBox.SelectedItem is ShopItem)
@@ -105,16 +123,24 @@
             acBox.Foreground = new SolidColorBrush { Color = (Color)ColorConverter.ConvertFromString("Gray") };
         }
 
+
+        private void AutoCompleteBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            var acBox = sender as AutoCompleteBox;
+            acBox.Text = "Enter OverlordCharacter Abilities and Runes Here...";
+            acBox.Foreground = new SolidColorBrush { Color = (Color)ColorConverter.ConvertFromString("Gray") };
+        }
+
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
             var tb = (dynamic)sender;
             dynamic p1 = tb.Parent.TemplatedParent.Parent.Parent.TemplatedParent.Content;
-            this.players.Remove(p1);
+            this.campaign.Players.Remove(p1);
         }
 
         private void ClearAutoCompleteBoxIfNecessary(AutoCompleteBox acBox)
         {
-            if (acBox.Text == "Enter Items, Search Cards, Class Abilites and Relics Here...")
+            if (acBox.Text == "Enter Items, Search Cards, Class Abilites and Relics Here..." || acBox.Text == "Enter OverlordCharacter Abilities and Runes Here...")
             {
                 acBox.Text = string.Empty;
                 acBox.Foreground = new SolidColorBrush { Color = (Color)ColorConverter.ConvertFromString("Black") };
@@ -178,8 +204,8 @@
             var ofd = new OpenFileDialog { Filter = "D2E Campaigns (.d2e)|*.d2e" };
             if (ofd.ShowDialog() == true)
             {
-                this.players = PlayerSerializer.DeSerialize(ofd.FileName);
-                this.SetPlayers(this.players);
+                this.campaign = PlayerSerializer.DeSerialize(ofd.FileName);
+                this.SetCampaign(this.campaign);
                 this.currentSavePath = ofd.FileName;
                 this.SetTitle();
             }
@@ -202,7 +228,7 @@
 
             if (sfd.ShowDialog() == true)
             {
-                PlayerSerializer.Serialize(this.players, sfd.FileName);
+                PlayerSerializer.Serialize(this.campaign, sfd.FileName);
                 this.SetStatusBarMessage("Saved.", 3000);
                 this.currentSavePath = sfd.FileName;
                 this.SetTitle();
@@ -220,19 +246,21 @@
             }
             else
             {
-                PlayerSerializer.Serialize(this.players, this.currentSavePath);
+                PlayerSerializer.Serialize(this.campaign, this.currentSavePath);
                 this.SetStatusBarMessage("Saved.", 3000);
                 this.SetTitle();
             }
         }
 
-        private void SetPlayers(IEnumerable<Player> playersToSet)
+        private void SetCampaign(DescentCampaign c)
         {
-            this.tc_Players.ItemsSource = playersToSet;
+            this.tc_Players.ItemsSource = c.Players;
             if (this.tc_Players.HasItems)
             {
                 this.tc_Players.SelectedIndex = 0;
             }
+            ic_Campaign.DataContext = c;
+            this.campaign = c;
         }
 
         private void SetStatusBarMessage(string message, int timeMs)
@@ -324,6 +352,17 @@
 
             CustomCommands.OpenCommand.InputGestures.Add(new KeyGesture(Key.O, ModifierKeys.Control));
 
+            campaign.Overlord = new OverlordCharacter()
+            {
+                OverlordClassAbilities = new ObservableCollection<OverlordClassAbility>(),
+                OverlordRelics = new ObservableCollection<OverlordRelic>(),
+                UnspentExp = 0
+            };
+            campaign.UnspentPlayerGold = 0;
+            campaign.Players = new ObservableCollection<Player>();
+
+            ic_Campaign.DataContext = campaign;
+
             File.ReadLines(@"Data\ShopItems.csv")
                 .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
                 .MapCsvUsingHeader().Into<ShopItem>()
@@ -359,6 +398,17 @@
                             MyResources.playerRelics.Add(item);
                             MyResources.allSearchableItems.Add(item);
                         });
+            File.ReadLines(@"Data\OverlordRelics.csv")
+                .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
+                .MapCsvUsingHeader()
+                .Into<OverlordRelic>()
+                .ToList()
+                .ForEach(item =>
+                {
+                    MyResources.overlordRelics.Add(item);
+                    MyResources.overlordSearchableItems.Add(item);
+                });
+
             File.ReadLines(@"Data\SearchCardItems.csv")
                 .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
                 .MapCsvUsingHeader()
@@ -373,7 +423,7 @@
             MyResources.itemNames = MyResources.shopItems.Select(x => x.Name).ToList();
             for (int i = 1; i <= 4; i++)
             {
-                this.players.Add(
+                this.campaign.Players.Add(
                     new Player
                         {
                             Name = "Player " + i, 
@@ -386,9 +436,12 @@
                         });
             }
 
-            this.SetPlayers(this.players);
+            this.SetCampaign(this.campaign);
         }
 
         #endregion
+
+
+
     }
 }

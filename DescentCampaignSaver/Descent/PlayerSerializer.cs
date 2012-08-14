@@ -24,15 +24,21 @@
         /// <param name="path">
         /// The path.
         /// </param>
-        public static void Serialize(ObservableCollection<Player> players, string path)
+        public static void Serialize(DescentCampaign campaign, string path)
         {
             using (var sw = new FileStream(path, FileMode.Create, FileAccess.ReadWrite))
             using (var cw = new GZipStream(sw, CompressionMode.Compress))
             {
                 var xsr = new XmlSerializer(
-                    typeof(ObservableCollection<Player>),
+                    typeof(DescentCampaign),
                     new[]
                         {
+                            typeof(ObservableCollection<Player>),
+                            typeof(DescentCampaign),
+                            typeof(OverlordCharacter),
+                            typeof(OverlordClassAbility),
+                            typeof(ObservableCollection<OverlordClassAbility>),
+                            typeof(OverlordRelic),
                             typeof(ShopItem),
                             typeof(PlayerRelic), 
                             typeof(ClassAbility),
@@ -40,7 +46,7 @@
                             typeof(Player),
                             typeof(DescentCharacter)
                         });
-                xsr.Serialize(cw, players);
+                xsr.Serialize(cw, campaign);
             }
         }
 
@@ -53,27 +59,33 @@
         /// <returns>
         /// The System.Collections.ObjectModel.ObservableCollection`1[T -&gt; DescentCampaignSaver.Descent.Player].
         /// </returns>
-        public static ObservableCollection<Player> DeSerialize(string path)
+        public static DescentCampaign DeSerialize(string path)
         {
-            ObservableCollection<Player> players;
+            DescentCampaign campaign;
             var xsr = new XmlSerializer(
-                typeof(ObservableCollection<Player>),
+                typeof(DescentCampaign),
                 new[]
                     {
-                        typeof(ShopItem),
-                        typeof(SearchCardItem),
-                        typeof(PlayerRelic),
-                        typeof(ClassAbility),
-                        typeof(Player),
-                        typeof(DescentCharacter)
+                            typeof(ObservableCollection<Player>),
+                            typeof(DescentCampaign),
+                            typeof(OverlordCharacter),
+                            typeof(OverlordClassAbility),
+                            typeof(ObservableCollection<OverlordClassAbility>),
+                            typeof(OverlordRelic),
+                            typeof(ShopItem),
+                            typeof(PlayerRelic), 
+                            typeof(ClassAbility),
+                            typeof(SearchCardItem),
+                            typeof(Player),
+                            typeof(DescentCharacter)
                     });
             using (var sr = new FileStream(path, FileMode.Open, FileAccess.Read))
             using (var cr = new GZipStream(sr, CompressionMode.Decompress))
             {
-                players = (ObservableCollection<Player>)xsr.Deserialize(cr);
+                campaign = (DescentCampaign)xsr.Deserialize(cr);
             }
 
-            return players;
+            return campaign;
         }
     }
 }
