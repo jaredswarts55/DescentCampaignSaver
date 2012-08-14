@@ -69,11 +69,12 @@
     <Compile Include="Descent\GameTypes.cs" />
     <Compile Include="Descent\OverlordCharacter.cs" />
     <Compile Include="Descent\OverlordClassAbility.cs" />
+    <Compile Include="Descent\IPlayer.cs" />
     <Compile Include="Descent\Relics\OverlordRelic.cs" />
     <Compile Include="Descent\Relics\PlayerRelic.cs" />
     <Compile Include="Descent\PlayerSerializer.cs" />
     <Compile Include="Descent\Characters\DescentCharacter.cs" />
-    <Compile Include="Descent\Player.cs" />
+    <Compile Include="Descent\Hero.cs" />
     <Compile Include="Descent\ISearchable.cs" />
     <Compile Include="Descent\ItemTypes.cs" />
     <Compile Include="Descent\SearchItems\SearchCardItem.cs" />
@@ -138,7 +139,10 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Data\UIImages\campaign.jpg" />
+    <Resource Include="Data\UIImages\playerIcon.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Data\CharacterImages\Ashrian.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

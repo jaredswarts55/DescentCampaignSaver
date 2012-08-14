@@ -10,12 +10,12 @@
     /// <summary>
     /// The player.
     /// </summary>
-    public class Player
+    public class Hero : IPlayer
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Player"/> class.
+        /// Initializes a new instance of the <see cref="Hero"/> class.
         /// </summary>
-        public Player()
+        public Hero()
         {
         }
 
@@ -23,6 +23,17 @@
         /// Gets or sets the name.
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Gets the image.
+        /// </summary>
+        public string Image
+        {
+            get
+            {
+                return @"Data\UIImages\playerIcon.png";
+            }
+        }
 
         /// <summary>
         /// Gets or sets the unspent exp.
@@ -88,5 +99,19 @@
         /// Gets or sets the class.
         /// </summary>
         public CharacterClasses? Class { get; set; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Hero)
+            {
+                var hobj = obj as Hero;
+                if (hobj.Name == this.Name)
+                    return true;
+                else
+                    return false;
+            }
+            return base.Equals(obj);
+        }
+
     }
 }

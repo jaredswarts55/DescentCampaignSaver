@@ -33,7 +33,7 @@
                     typeof(DescentCampaign),
                     new[]
                         {
-                            typeof(ObservableCollection<Player>),
+                            typeof(ObservableCollection<Hero>),
                             typeof(DescentCampaign),
                             typeof(OverlordCharacter),
                             typeof(OverlordClassAbility),
@@ -43,7 +43,7 @@
                             typeof(PlayerRelic), 
                             typeof(ClassAbility),
                             typeof(SearchCardItem),
-                            typeof(Player),
+                            typeof(Hero),
                             typeof(DescentCharacter)
                         });
                 xsr.Serialize(cw, campaign);
@@ -57,7 +57,7 @@
         /// The path.
         /// </param>
         /// <returns>
-        /// The System.Collections.ObjectModel.ObservableCollection`1[T -&gt; DescentCampaignSaver.Descent.Player].
+        /// The System.Collections.ObjectModel.ObservableCollection`1[T -&gt; DescentCampaignSaver.Descent.Hero].
         /// </returns>
         public static DescentCampaign DeSerialize(string path)
         {
@@ -66,7 +66,7 @@
                 typeof(DescentCampaign),
                 new[]
                     {
-                            typeof(ObservableCollection<Player>),
+                            typeof(ObservableCollection<Hero>),
                             typeof(DescentCampaign),
                             typeof(OverlordCharacter),
                             typeof(OverlordClassAbility),
@@ -76,7 +76,7 @@
                             typeof(PlayerRelic), 
                             typeof(ClassAbility),
                             typeof(SearchCardItem),
-                            typeof(Player),
+                            typeof(Hero),
                             typeof(DescentCharacter)
                     });
             using (var sr = new FileStream(path, FileMode.Open, FileAccess.Read))

@@ -1,6 +1,7 @@
 ﻿<Window x:Class="DescentCampaignSaver.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:self="clr-namespace:DescentCampaignSaver.Descent"
         xmlns:dcSaver="clr-namespace:DescentCampaignSaver"
+        xmlns:dcDescent="clr-namespace:DescentCampaignSaver.Descent"
         xmlns:my="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         Title="Untitled.d2e - Descent 2nd Edition Campaign Saver" Height="768" Width="1024" Loaded="WindowLoaded"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -11,6 +12,7 @@
                 <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="LightBlue" />
             </Style.Resources>
         </Style>
+        
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static dcSaver:CustomCommands.SaveCommand}" Executed="CommandSaveExecuted" />
@@ -20,7 +22,6 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="20" />
-            <RowDefinition Height="300" />
             <RowDefinition Height="*" />
             <RowDefinition Height="22" />
         </Grid.RowDefinitions>
@@ -35,69 +36,61 @@
                 <MenuItem Header="E_xit" Click="MenuItemClick" />
             </MenuItem>
         </Menu>
-        <StackPanel Orientation="Vertical" Name="ic_Campaign" Grid.Row="1">
-            <StackPanel Orientation="Horizontal">
-                <Label Content="Unspent Player Gold" Width="150px" FontWeight="Bold"/>
-                <TextBox Text="{Binding Path=UnspentPlayerGold}" Height="20px" Width="100px"
+        <TabControl Grid.Row="1" Name="tc_Players">
+            <TabControl.Resources>
+                <DataTemplate DataType="{x:Type dcDescent:DescentCampaign}">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Unspent Hero Gold" Width="150px" FontWeight="Bold"/>
+                            <TextBox Text="{Binding Path=UnspentPlayerGold}" Height="20px" Width="100px"
                        GotMouseCapture="TextBoxGotMouseCapture" GotKeyboardFocus="TextBoxClearOnFocus" />
-                <Label Content="Overlord Unspent Exp: " Width="150px" FontWeight="Bold" Margin="30 0 0 5" />
-                <TextBox Text="{Binding Path=UnspentExp}" Height="20px" Width="100px" DataContext="{Binding Path=Overlord}"
+                            <Label Content="Overlord Unspent Exp: " Width="150px" FontWeight="Bold" Margin="30 0 0 5" />
+                            <TextBox Text="{Binding Path=UnspentExp}" Height="20px" Width="100px" DataContext="{Binding Path=Overlord}"
                        GotMouseCapture="TextBoxGotMouseCapture" GotKeyboardFocus="TextBoxClearOnFocus" />
-            </StackPanel>
-            <StackPanel Orientation="Vertical">
-                <Label Content="Notes" Width="100px" HorizontalAlignment="Left" FontWeight="Bold"/>
-                <TextBox Text="{Binding Path=Notes}" AcceptsReturn="True" Height="40px"
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical">
+                            <Label Content="Notes" Width="100px" HorizontalAlignment="Left" FontWeight="Bold"/>
+                            <TextBox Text="{Binding Path=Notes}" AcceptsReturn="True" Height="40px"
                        GotMouseCapture="TextBoxGotMouseCapture" GotKeyboardFocus="TextBoxClearOnFocus" />
-            </StackPanel>
-            <my:AutoCompleteBox Margin="0 20 0 0" Foreground="Gray"
+                        </StackPanel>
+                        <my:AutoCompleteBox Margin="0 20 0 0" Foreground="Gray"
                                 Text="Enter OverlordCharacter Abilities and Runes Here..."
                                 ItemsSource="{Binding Source={x:Static dcSaver:MyResources.overlordSearchableItems}}" IsTextCompletionEnabled="True"
                                 FilterMode="Contains" IsDropDownOpen="True" ValueMemberPath="Name" Style="{StaticResource myListboxStyle}"
                                 PreviewKeyDown="AutoCompleteBoxPreviewKeyDown"  PreviewMouseDown="AutoCompleteBoxPreviewMouseDown"
                                 PreviewGotKeyboardFocus="AutoCompleteBoxGotFocus" LostFocus="AutoCompleteBox_LostFocus">
-                <my:AutoCompleteBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Label Content="Name: " FontWeight="Bold" Margin="5 0 5 0"
+                            <my:AutoCompleteBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Label Content="Name: " FontWeight="Bold" Margin="5 0 5 0"
                            VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding Path=Name}" Width="150px" Margin="5 0 5 0"
+                                        <TextBlock Text="{Binding Path=Name}" Width="150px" Margin="5 0 5 0"
                                VerticalAlignment="Center" />
-                            <Label Content="Type: " FontWeight="Bold" Margin="5 0 5 0"
+                                        <Label Content="Type: " FontWeight="Bold" Margin="5 0 5 0"
                            VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding Path=GameType}" Width="150px" Margin="5 0 5 0"
+                                        <TextBlock Text="{Binding Path=GameType}" Width="150px" Margin="5 0 5 0"
                                VerticalAlignment="Center" />
-                            <Label Content="Description: " FontWeight="Bold" Margin="5 0 5 0"
+                                        <Label Content="Description: " FontWeight="Bold" Margin="5 0 5 0"
                            VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding Path=Description}" Margin="5 0 5 0"
+                                        <TextBlock Text="{Binding Path=Description}" Margin="5 0 5 0"
                                VerticalAlignment="Center" />
-                        </StackPanel>
-                    </DataTemplate>
-                </my:AutoCompleteBox.ItemTemplate>
-            </my:AutoCompleteBox>
-            <ScrollViewer VerticalScrollBarVisibility="Visible" Height="Auto">
-                <StackPanel Orientation="Vertical">
-                    <Label Content="OverlordCharacter Relics" FontWeight="Bold" Margin="0 2 0 0" />
-                    <DataGrid CanUserAddRows="False" Height="Auto" ItemsSource="{Binding Path=OverlordRelics}"
+                                    </StackPanel>
+                                </DataTemplate>
+                            </my:AutoCompleteBox.ItemTemplate>
+                        </my:AutoCompleteBox>
+                        <ScrollViewer VerticalScrollBarVisibility="Visible" Height="Auto">
+                            <StackPanel Orientation="Vertical">
+                                <Label Content="OverlordCharacter Relics" FontWeight="Bold" Margin="0 2 0 0" />
+                                <DataGrid CanUserAddRows="False" Height="Auto" ItemsSource="{Binding Path=OverlordRelics}"
                       AutoGeneratingColumn="DataGridAutoGeneratingColumn" DataContext="{Binding Path=Overlord}"/>
-                    <Label Content="OverlordCharacter Bought Cards" FontWeight="Bold" Margin="0 2 0 0" />
-                    <DataGrid CanUserAddRows="False" Height="Auto" ItemsSource="{Binding Path=OverlordClassAbilities}"
+                                <Label Content="OverlordCharacter Bought Cards" FontWeight="Bold" Margin="0 2 0 0" />
+                                <DataGrid CanUserAddRows="False" Height="Auto" ItemsSource="{Binding Path=OverlordClassAbilities}"
                       AutoGeneratingColumn="DataGridAutoGeneratingColumn" DataContext="{Binding Path=Overlord}" />
-                </StackPanel>
-            </ScrollViewer>
-        </StackPanel>
-        <TabControl Grid.Row="2" Name="tc_Players">
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox Text="{Binding Path=Name}" Cursor="Arrow" BorderThickness="0" Background="Transparent"
-                     IsReadOnly="True" IsReadOnlyCaretVisible="False" KeyDown="TextBoxKeyDown" LostFocus="TextBoxLostFocus"
-                     PreviewMouseDoubleClick="TextBoxMouseDoubleClick" PreviewMouseDown="TextBoxMouseDown" />
-                        <Button Content="X" Click="ButtonClick" Height="20px" />
+                            </StackPanel>
+                        </ScrollViewer>
                     </StackPanel>
                 </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
-                <DataTemplate>
+                <DataTemplate DataType="{x:Type dcDescent:Hero}">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <Label Content="CurrentHealth: " Width="100px" />
@@ -161,14 +154,25 @@
                         <Label Content="Search Card Items" FontWeight="Bold" Margin="0 2 0 0" />
                         <DataGrid CanUserAddRows="False" Height="Auto" ItemsSource="{Binding Path=SearchCardItems}"
                       AutoGeneratingColumn="DataGridAutoGeneratingColumn" />
-                        <Label Content="Player Relics" FontWeight="Bold" Margin="0 2 0 0" />
+                        <Label Content="Hero Relics" FontWeight="Bold" Margin="0 2 0 0" />
                         <DataGrid CanUserAddRows="False" Height="Auto" ItemsSource="{Binding Path=PlayerRelics}"
                       AutoGeneratingColumn="DataGridAutoGeneratingColumn" />
                     </StackPanel>
                 </DataTemplate>
-            </TabControl.ContentTemplate>
+            </TabControl.Resources>
+            <TabControl.ItemTemplate>
+                <DataTemplate DataType="dcDescent:Hero">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Path=Image}" Width="20px" Height="20px"/>
+                        <TextBox Text="{Binding Path=Name}" Cursor="Arrow" BorderThickness="0" Background="Transparent"
+                     IsReadOnly="True" IsReadOnlyCaretVisible="False" KeyDown="TextBoxKeyDown" LostFocus="TextBoxLostFocus"
+                     PreviewMouseDoubleClick="TextBoxMouseDoubleClick" PreviewMouseDown="TextBoxMouseDown" />
+                        <Button Content="X" Click="ButtonClick" Height="20px" />
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
         </TabControl>
-        <StatusBar Grid.Row="3">
+        <StatusBar Grid.Row="2">
             <StackPanel Orientation="Horizontal">
                 <TextBlock VerticalAlignment="Top" Name="tb_StatusBar" Text="" />
             </StackPanel>

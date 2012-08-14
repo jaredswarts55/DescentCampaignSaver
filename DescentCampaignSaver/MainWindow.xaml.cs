@@ -35,6 +35,7 @@
         private string currentSavePath;
 
         private DescentCampaign campaign = new DescentCampaign();
+        ObservableCollection<IPlayer> bound = new ObservableCollection<IPlayer>();
 
         /// <summary>
         /// The playersToSet.
@@ -78,24 +79,24 @@
             if (e.Key == Key.Enter)
             {
                 var aBox = (AutoCompleteBox)sender;
-                Player player = this.campaign.Players.FirstOrDefault(x => x.Name == aBox.Tag.ToString());
-                if (player != null && aBox.SelectedItem != null)
+                Hero hero = this.campaign.Players.FirstOrDefault(x => x.Name == aBox.Tag.ToString());
+                if (hero != null && aBox.SelectedItem != null)
                 {
                     if (aBox.SelectedItem is ShopItem)
                     {
-                        player.ShopItems.Add((ShopItem)aBox.SelectedItem);
+                        hero.ShopItems.Add((ShopItem)aBox.SelectedItem);
                     }
                     else if (aBox.SelectedItem is SearchCardItem)
                     {
-                        player.SearchCardItems.Add((SearchCardItem)aBox.SelectedItem);
+                        hero.SearchCardItems.Add((SearchCardItem)aBox.SelectedItem);
                     }
                     else if (aBox.SelectedItem is PlayerRelic)
                     {
-                        player.PlayerRelics.Add((PlayerRelic)aBox.SelectedItem);
+                        hero.PlayerRelics.Add((PlayerRelic)aBox.SelectedItem);
                     }
                     else if (aBox.SelectedItem is ClassAbility)
                     {
-                        player.ClassAbilites.Add((ClassAbility)aBox.SelectedItem);
+                        hero.ClassAbilites.Add((ClassAbility)aBox.SelectedItem);
                     }
                 }
 
@@ -136,6 +137,7 @@
             var tb = (dynamic)sender;
             dynamic p1 = tb.Parent.TemplatedParent.Parent.Parent.TemplatedParent.Content;
             this.campaign.Players.Remove(p1);
+            this.SetCampaign(this.campaign);
         }
 
         private void ClearAutoCompleteBoxIfNecessary(AutoCompleteBox acBox)
@@ -254,13 +256,17 @@
 
         private void SetCampaign(DescentCampaign c)
         {
-            this.tc_Players.ItemsSource = c.Players;
+            bound.Clear();
+            bound.Add(c);
+            c.Players.ToList()
+                .ForEach(player => bound.Add(player));
+            this.campaign = c;
+            this.tc_Players.ItemsSource = bound;
             if (this.tc_Players.HasItems)
             {
                 this.tc_Players.SelectedIndex = 0;
             }
-            ic_Campaign.DataContext = c;
-            this.campaign = c;
+
         }
 
         private void SetStatusBarMessage(string message, int timeMs)
@@ -323,7 +329,7 @@
         private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var tb = sender as TextBox;
-            if (tb.IsReadOnly)
+            if (tb.IsReadOnly && tb.DataContext is Hero)
             {
                 tb.IsReadOnly = false;
                 e.Handled = true;
@@ -359,9 +365,7 @@
                 UnspentExp = 0
             };
             campaign.UnspentPlayerGold = 0;
-            campaign.Players = new ObservableCollection<Player>();
-
-            ic_Campaign.DataContext = campaign;
+            campaign.Players = new ObservableCollection<Hero>();
 
             File.ReadLines(@"Data\ShopItems.csv")
                 .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
@@ -424,9 +428,9 @@
             for (int i = 1; i <= 4; i++)
             {
                 this.campaign.Players.Add(
-                    new Player
+                    new Hero
                         {
-                            Name = "Player " + i, 
+                            Name = "Hero " + i, 
                             CurrentFatigue = 0, 
                             CurrentHealth = 0, 
                             ShopItems = new ObservableCollection<ShopItem>(), 
