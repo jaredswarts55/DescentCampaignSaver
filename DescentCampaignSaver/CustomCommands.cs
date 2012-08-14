@@ -1,15 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Input;
-
-namespace DescentCampaignSaver
+﻿namespace DescentCampaignSaver
 {
-    class CustomCommands
+    using System.Windows.Input;
+
+    /// <summary>
+    /// The custom commands.
+    /// </summary>
+    internal class CustomCommands
     {
+        /// <summary>
+        /// The save command.
+        /// </summary>
         public static RoutedCommand SaveCommand = new RoutedCommand();
+
+        /// <summary>
+        /// The save as command.
+        /// </summary>
         public static RoutedCommand SaveAsCommand = new RoutedCommand();
+
+        /// <summary>
+        /// The open command.
+        /// </summary>
         public static RoutedCommand OpenCommand = new RoutedCommand();
     }
 }

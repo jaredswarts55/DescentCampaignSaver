@@ -1,14 +1,48 @@
 namespace DescentCampaignSaver.Descent.Characters
 {
+    /// <summary>
+    /// The character classes.
+    /// </summary>
     public enum CharacterClasses
     {
-        Knight=1,
-        Berserker=2,
-        Wildlander=3,
-        Thief=4,
-        Necromancer=5,
-        Runemaster=6,
-        Spiritspeaker=7,
-        Disciple=8
+        /// <summary>
+        /// The knight.
+        /// </summary>
+        Knight = 1, 
+
+        /// <summary>
+        /// The berserker.
+        /// </summary>
+        Berserker = 2, 
+
+        /// <summary>
+        /// The wildlander.
+        /// </summary>
+        Wildlander = 3, 
+
+        /// <summary>
+        /// The thief.
+        /// </summary>
+        Thief = 4, 
+
+        /// <summary>
+        /// The necromancer.
+        /// </summary>
+        Necromancer = 5, 
+
+        /// <summary>
+        /// The runemaster.
+        /// </summary>
+        Runemaster = 6, 
+
+        /// <summary>
+        /// The spiritspeaker.
+        /// </summary>
+        Spiritspeaker = 7, 
+
+        /// <summary>
+        /// The disciple.
+        /// </summary>
+        Disciple = 8
     }
 }

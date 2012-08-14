@@ -61,11 +61,14 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CustomCommands.cs" />
+    <Compile Include="DescentCampaign.cs" />
     <Compile Include="Descent\Characters\ArchTypes.cs" />
     <Compile Include="Descent\Characters\CharacterClasses.cs" />
     <Compile Include="Descent\Characters\ClassAbility.cs" />
     <Compile Include="Descent\DiceMappingConverter.cs" />
     <Compile Include="Descent\GameTypes.cs" />
+    <Compile Include="Descent\Overlord.cs" />
+    <Compile Include="Descent\OverlordClassAbility.cs" />
     <Compile Include="Descent\Relics\OverlordRelic.cs" />
     <Compile Include="Descent\Relics\PlayerRelic.cs" />
     <Compile Include="Descent\PlayerSerializer.cs" />
