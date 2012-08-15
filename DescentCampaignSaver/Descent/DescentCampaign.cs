@@ -7,7 +7,7 @@
     /// <summary>
     /// The descent campaign.
     /// </summary>
-    public class DescentCampaign : IPlayer, INotifyPropertyChanged
+    public class DescentCampaign : ITabular, INotifyPropertyChanged
     {
         /// <summary>
         /// The overlord.

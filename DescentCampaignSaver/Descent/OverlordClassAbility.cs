@@ -7,8 +7,20 @@ namespace DescentCampaignSaver.Descent
     {
         public string Name { get; set; }
 
+        public OverlordAbilityTypes AbilityType { get; set; }
+
+        public OverlordCategoryType Category { get; set; }
+
+        public int ExpCost { get; set; }
+
         public string Description { get; set; }
 
-        public GameTypes GameType { get; set; }
+        public GameTypes GameType
+        {
+            get
+            {
+                return GameTypes.OverlordClassAbility;
+            }
+        }
     }
 }

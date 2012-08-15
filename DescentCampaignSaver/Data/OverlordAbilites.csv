@@ -1,0 +1,41 @@
+Name,AbilityType,Category,ExpCost
+Poison Dart,Trap,Basic,0
+Dark Fortune,Event,Basic,0
+Dark Fortune,Event,Basic,0
+Dark Charm,Magic,Basic,0
+Dark Might,Magic,Basic,0
+Frenzy,Event,Basic,0
+Dash,Event,Basic,0
+Word Of Misery,Magic,Basic,0
+Pit Trap,Trap,Basic,0
+Tripwire,Trap,Basic,0
+Tripwire,Trap,Basic,0
+Dark Might,Magic,Basic,0
+Frenzy,Event,Basic,0
+Critical Blow,Event,Basic,0
+Dash,Event,Basic,0
+Schemes,Event,Universal,1
+Dark Resilience,Magic,Universal,1
+Plan Ahead,Event,Universal,1
+Plan Ahead,Event,Universal,1
+Word Of Pain,Magic,Magus,1
+Unholy Ritual,Magic,Magus,1
+Unholy Ritual,Magic,Magus,1
+Word Of Pain,Magic,Magus,1
+Rise Again,Magic,Magus,2
+Word Of Despair,Magic,Magus,2
+Diabolic Power,Magic,Magus,3
+Blood Rage,Event,Warlord,1
+Blood Rage,Event,Warlord,1
+Dark Fortitude,Event,Warlord,1
+Dark Fortitude,Event,Warlord,1
+Bloodlust,Event,Warlord,2
+Expert Blow,Event,Warlord,2
+Reinforce,Event,Warlord,3
+Web Trap,Trap,Saboteur,1
+Web Trap,Trap,Saboteur,1
+Explosive Runes,Trap,Saboteur,1
+Explosive Runes,Trap,Saboteur,1
+Wicked Laughter,Event,Saboteur,2
+Curse Of The Monkey God,Trap,Saboteur,2
+Uthuk Demon Trap,Trap,Saboteur,3

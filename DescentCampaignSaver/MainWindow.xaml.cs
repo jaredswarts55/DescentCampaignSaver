@@ -35,7 +35,7 @@
         private string currentSavePath;
 
         private DescentCampaign campaign = new DescentCampaign();
-        ObservableCollection<IPlayer> bound = new ObservableCollection<IPlayer>();
+        ObservableCollection<ITabular> bound = new ObservableCollection<ITabular>();
 
         /// <summary>
         /// The playersToSet.
@@ -258,6 +258,7 @@
         {
             bound.Clear();
             bound.Add(c);
+            bound.Add(c.Overlord);
             c.Players.ToList()
                 .ForEach(player => bound.Add(player));
             this.campaign = c;
@@ -412,7 +413,16 @@
                     MyResources.overlordRelics.Add(item);
                     MyResources.overlordSearchableItems.Add(item);
                 });
-
+            File.ReadLines(@"Data\OverlordAbilites.csv")
+                .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
+                .MapCsvUsingHeader()
+                .Into<OverlordClassAbility>()
+                .ToList()
+                .ForEach(item =>
+                {
+                    MyResources.overlordClassAbilities.Add(item);
+                    MyResources.overlordSearchableItems.Add(item);
+                });
             File.ReadLines(@"Data\SearchCardItems.csv")
                 .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
                 .MapCsvUsingHeader()

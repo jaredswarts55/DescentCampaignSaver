@@ -12,7 +12,7 @@
                 <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="LightBlue" />
             </Style.Resources>
         </Style>
-        
+
     </Window.Resources>
     <Window.CommandBindings>
         <CommandBinding Command="{x:Static dcSaver:CustomCommands.SaveCommand}" Executed="CommandSaveExecuted" />
@@ -44,14 +44,22 @@
                             <Label Content="Unspent Hero Gold" Width="150px" FontWeight="Bold"/>
                             <TextBox Text="{Binding Path=UnspentPlayerGold}" Height="20px" Width="100px"
                        GotMouseCapture="TextBoxGotMouseCapture" GotKeyboardFocus="TextBoxClearOnFocus" />
-                            <Label Content="Overlord Unspent Exp: " Width="150px" FontWeight="Bold" Margin="30 0 0 5" />
-                            <TextBox Text="{Binding Path=UnspentExp}" Height="20px" Width="100px" DataContext="{Binding Path=Overlord}"
-                       GotMouseCapture="TextBoxGotMouseCapture" GotKeyboardFocus="TextBoxClearOnFocus" />
+
                         </StackPanel>
                         <StackPanel Orientation="Vertical">
                             <Label Content="Notes" Width="100px" HorizontalAlignment="Left" FontWeight="Bold"/>
                             <TextBox Text="{Binding Path=Notes}" AcceptsReturn="True" Height="40px"
                        GotMouseCapture="TextBoxGotMouseCapture" GotKeyboardFocus="TextBoxClearOnFocus" />
+                        </StackPanel>
+
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate DataType="{x:Type dcDescent:OverlordCharacter}">
+                    <StackPanel Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="Overlord Unspent Exp: " HorizontalAlignment="Left" Width="150px" FontWeight="Bold" Margin="0 0 0 5" />
+                            <TextBox Text="{Binding Path=UnspentExp}" Height="20px" Width="100px"
+                                GotMouseCapture="TextBoxGotMouseCapture" GotKeyboardFocus="TextBoxClearOnFocus" />
                         </StackPanel>
                         <my:AutoCompleteBox Margin="0 20 0 0" Foreground="Gray"
                                 Text="Enter OverlordCharacter Abilities and Runes Here..."
@@ -82,10 +90,10 @@
                             <StackPanel Orientation="Vertical">
                                 <Label Content="OverlordCharacter Relics" FontWeight="Bold" Margin="0 2 0 0" />
                                 <DataGrid CanUserAddRows="False" Height="Auto" ItemsSource="{Binding Path=OverlordRelics}"
-                      AutoGeneratingColumn="DataGridAutoGeneratingColumn" DataContext="{Binding Path=Overlord}"/>
+                      AutoGeneratingColumn="DataGridAutoGeneratingColumn"/>
                                 <Label Content="OverlordCharacter Bought Cards" FontWeight="Bold" Margin="0 2 0 0" />
                                 <DataGrid CanUserAddRows="False" Height="Auto" ItemsSource="{Binding Path=OverlordClassAbilities}"
-                      AutoGeneratingColumn="DataGridAutoGeneratingColumn" DataContext="{Binding Path=Overlord}" />
+                      AutoGeneratingColumn="DataGridAutoGeneratingColumn"/>
                             </StackPanel>
                         </ScrollViewer>
                     </StackPanel>

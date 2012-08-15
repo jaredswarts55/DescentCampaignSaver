@@ -67,9 +67,11 @@
     <Compile Include="Descent\Characters\ClassAbility.cs" />
     <Compile Include="Descent\DiceMappingConverter.cs" />
     <Compile Include="Descent\GameTypes.cs" />
+    <Compile Include="Descent\OverlordAbilityTypes.cs" />
+    <Compile Include="Descent\OverlordCategoryType.cs" />
     <Compile Include="Descent\OverlordCharacter.cs" />
     <Compile Include="Descent\OverlordClassAbility.cs" />
-    <Compile Include="Descent\IPlayer.cs" />
+    <Compile Include="Descent\ITabular.cs" />
     <Compile Include="Descent\Relics\OverlordRelic.cs" />
     <Compile Include="Descent\Relics\PlayerRelic.cs" />
     <Compile Include="Descent\PlayerSerializer.cs" />
@@ -121,6 +123,9 @@
     <None Include="Data\ClassAbilities.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Data\OverlordAbilites.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Data\OverlordRelics.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -159,6 +164,9 @@
     <Resource Include="Data\CharacterImages\Tomble Burrowell.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Data\UIImages\overlordIcon.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

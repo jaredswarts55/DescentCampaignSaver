@@ -10,7 +10,7 @@
     /// <summary>
     /// The player.
     /// </summary>
-    public class Hero : IPlayer
+    public class Hero : ITabular
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="Hero"/> class.

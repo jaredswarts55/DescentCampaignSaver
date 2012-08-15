@@ -23,6 +23,13 @@ namespace DescentCampaignSaver.Descent
         /// <summary>
         /// The class card.
         /// </summary>
-        ClassCard
+        ClassCard,
+
+        /// <summary>
+        /// Overlord Class Ability
+        /// </summary>
+        OverlordClassAbility
+
+
     }
 }

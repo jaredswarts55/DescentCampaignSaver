@@ -75,5 +75,7 @@
         public static ObservableCollection<ISearchable> allSearchableItems = new ObservableCollection<ISearchable>();
 
         public static ObservableCollection<ISearchable> overlordSearchableItems = new ObservableCollection<ISearchable>();
+
+        public static ObservableCollection<OverlordClassAbility> overlordClassAbilities = new ObservableCollection<OverlordClassAbility>();
     }
 }
