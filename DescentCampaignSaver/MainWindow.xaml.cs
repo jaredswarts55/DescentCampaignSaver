@@ -1,7 +1,6 @@
 ﻿namespace DescentCampaignSaver
 {
     using System;
-    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.IO;
@@ -13,12 +12,14 @@
     using System.Windows.Media;
 
     using DescentCampaignSaver.Descent;
-    using DescentCampaignSaver.Descent.Characters;
+    using DescentCampaignSaver.Descent.Heroes;
+    using DescentCampaignSaver.Descent.Other;
+    using DescentCampaignSaver.Descent.Overlord;
     using DescentCampaignSaver.Descent.Relics;
+    using DescentCampaignSaver.Descent.Scenario;
     using DescentCampaignSaver.Descent.SearchItems;
+    using DescentCampaignSaver.Descent.Shared;
     using DescentCampaignSaver.Descent.Shop;
-
-    using Mapping;
 
     using Microsoft.Win32;
 
@@ -30,21 +31,28 @@
         #region Fields
 
         /// <summary>
+        /// The bound.
+        /// </summary>
+        private ObservableCollection<ITabular> bound = new ObservableCollection<ITabular>();
+
+        /// <summary>
+        /// The campaign.
+        /// </summary>
+        private DescentCampaign campaign = new DescentCampaign();
+
+        /// <summary>
         /// The current save path.
         /// </summary>
         private string currentSavePath;
-
-        private DescentCampaign campaign = new DescentCampaign();
-        ObservableCollection<ITabular> bound = new ObservableCollection<ITabular>();
-
-        /// <summary>
-        /// The playersToSet.
-        /// </summary>
 
         #endregion
 
         #region Constructors and Destructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MainWindow"/> class. 
+        /// The playersToSet.
+        /// </summary>
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
         /// </summary>
@@ -56,24 +64,31 @@
         #endregion
 
         #region Methods
-        private void AutoCompleteBoxPreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                var aBox = (AutoCompleteBox)sender;
-                if (campaign.Overlord != null && aBox.SelectedItem != null)
-                {
-                    if (aBox.SelectedItem is OverlordRelic)
-                        campaign.Overlord.OverlordRelics.Add((OverlordRelic)aBox.SelectedItem);
-                    else if (aBox.SelectedItem is OverlordClassAbility)
-                        campaign.Overlord.OverlordClassAbilities.Add((OverlordClassAbility)aBox.SelectedItem);
-                }
 
-                aBox.SelectedItem = null;
-                aBox.Text = string.Empty;
-            }
+        /// <summary>
+        /// The auto complete box got focus.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void AutoCompleteBoxGotFocus(object sender, RoutedEventArgs e)
+        {
+            var acBox = sender as AutoCompleteBox;
+            this.ClearAutoCompleteBoxIfNecessary(acBox);
         }
 
+        /// <summary>
+        /// The auto complete box key down.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void AutoCompleteBoxKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -105,18 +120,15 @@
             }
         }
 
-        private void AutoCompleteBoxPreviewMouseDown(object sender, MouseButtonEventArgs e)
-        {
-            var acBox = sender as AutoCompleteBox;
-            this.ClearAutoCompleteBoxIfNecessary(acBox);
-        }
-
-        private void AutoCompleteBoxGotFocus(object sender, RoutedEventArgs e)
-        {
-            var acBox = sender as AutoCompleteBox;
-            this.ClearAutoCompleteBoxIfNecessary(acBox);
-        }
-
+        /// <summary>
+        /// The auto complete box lost focus.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void AutoCompleteBoxLostFocus(object sender, RoutedEventArgs e)
         {
             var acBox = sender as AutoCompleteBox;
@@ -124,7 +136,61 @@
             acBox.Foreground = new SolidColorBrush { Color = (Color)ColorConverter.ConvertFromString("Gray") };
         }
 
+        /// <summary>
+        /// The auto complete box preview key down.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void AutoCompleteBoxPreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var aBox = (AutoCompleteBox)sender;
+                if (this.campaign.Overlord != null && aBox.SelectedItem != null)
+                {
+                    if (aBox.SelectedItem is OverlordRelic)
+                    {
+                        this.campaign.Overlord.OverlordRelics.Add((OverlordRelic)aBox.SelectedItem);
+                    }
+                    else if (aBox.SelectedItem is OverlordClassAbility)
+                    {
+                        this.campaign.Overlord.OverlordClassAbilities.Add((OverlordClassAbility)aBox.SelectedItem);
+                    }
+                }
 
+                aBox.SelectedItem = null;
+                aBox.Text = string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// The auto complete box preview mouse down.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
+        private void AutoCompleteBoxPreviewMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var acBox = sender as AutoCompleteBox;
+            this.ClearAutoCompleteBoxIfNecessary(acBox);
+        }
+
+        /// <summary>
+        /// The auto complete box_ lost focus.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void AutoCompleteBox_LostFocus(object sender, RoutedEventArgs e)
         {
             var acBox = sender as AutoCompleteBox;
@@ -132,6 +198,15 @@
             acBox.Foreground = new SolidColorBrush { Color = (Color)ColorConverter.ConvertFromString("Gray") };
         }
 
+        /// <summary>
+        /// The button click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
             var tb = (dynamic)sender;
@@ -140,15 +215,28 @@
             this.SetCampaign(this.campaign);
         }
 
+        /// <summary>
+        /// The clear auto complete box if necessary.
+        /// </summary>
+        /// <param name="acBox">
+        /// The ac box.
+        /// </param>
         private void ClearAutoCompleteBoxIfNecessary(AutoCompleteBox acBox)
         {
-            if (acBox.Text == "Enter Items, Search Cards, Class Abilites and Relics Here..." || acBox.Text == "Enter OverlordCharacter Abilities and Runes Here...")
+            if (acBox.Text == "Enter Items, Search Cards, Class Abilites and Relics Here..."
+                || acBox.Text == "Enter OverlordCharacter Abilities and Runes Here...")
             {
                 acBox.Text = string.Empty;
                 acBox.Foreground = new SolidColorBrush { Color = (Color)ColorConverter.ConvertFromString("Black") };
             }
         }
 
+        /// <summary>
+        /// The clear status bar threaded.
+        /// </summary>
+        /// <param name="timeMs">
+        /// The time ms.
+        /// </param>
         private void ClearStatusBarThreaded(object timeMs)
         {
             var time = (int)timeMs;
@@ -156,21 +244,57 @@
             this.tb_StatusBar.Dispatcher.Invoke(new Action(() => { this.tb_StatusBar.Text = string.Empty; }));
         }
 
+        /// <summary>
+        /// The command open executed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void CommandOpenExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             this.OpenFunction();
         }
 
+        /// <summary>
+        /// The command save as executed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void CommandSaveAsExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             this.SaveAsFunction();
         }
 
+        /// <summary>
+        /// The command save executed.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void CommandSaveExecuted(object sender, ExecutedRoutedEventArgs e)
         {
             this.SaveFunction();
         }
 
+        /// <summary>
+        /// The data grid auto generating column.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void DataGridAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             if (((PropertyDescriptor)e.PropertyDescriptor).IsBrowsable == false)
@@ -179,6 +303,15 @@
             }
         }
 
+        /// <summary>
+        /// The menu item click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void MenuItemClick(object sender, RoutedEventArgs e)
         {
             var mI = sender as MenuItem;
@@ -223,8 +356,8 @@
                     FileName =
                         this.currentSavePath != null
                             ? Path.GetFileNameWithoutExtension(this.currentSavePath)
-                            : "UntitledCampaign",
-                    DefaultExt = ".d2e",
+                            : "UntitledCampaign", 
+                    DefaultExt = ".d2e", 
                     Filter = "D2E Campaigns (.d2e)|*.d2e"
                 };
 
@@ -254,22 +387,40 @@
             }
         }
 
+        /// <summary>
+        /// The set campaign.
+        /// </summary>
+        /// <param name="c">
+        /// The c.
+        /// </param>
         private void SetCampaign(DescentCampaign c)
         {
-            bound.Clear();
-            bound.Add(c);
-            bound.Add(c.Overlord);
-            c.Players.ToList()
-                .ForEach(player => bound.Add(player));
+            this.bound.Clear();
+            this.bound.Add(c);
+            this.bound.Add(c.Overlord);
+            c.Players.ToList().ForEach(player =>
+                {
+                    player.ClassAbilites.CollectionChanged += this.ExpRecalculation;
+                    this.bound.Add(player); 
+                });
             this.campaign = c;
-            this.tc_Players.ItemsSource = bound;
+            this.campaign.Scenarios.CollectionChanged += this.ExpRecalculation;
+            this.tc_Players.ItemsSource = this.bound;
             if (this.tc_Players.HasItems)
             {
                 this.tc_Players.SelectedIndex = 0;
             }
-
         }
 
+        /// <summary>
+        /// The set status bar message.
+        /// </summary>
+        /// <param name="message">
+        /// The message.
+        /// </param>
+        /// <param name="timeMs">
+        /// The time ms.
+        /// </param>
         private void SetStatusBarMessage(string message, int timeMs)
         {
             this.tb_StatusBar.Text = message;
@@ -277,6 +428,9 @@
             th.Start(timeMs);
         }
 
+        /// <summary>
+        /// The set title.
+        /// </summary>
         private void SetTitle()
         {
             if (this.currentSavePath != null)
@@ -289,6 +443,15 @@
             }
         }
 
+        /// <summary>
+        /// The text box clear on focus.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void TextBoxClearOnFocus(object sender, KeyboardFocusChangedEventArgs e)
         {
             var tb = sender as TextBox;
@@ -296,6 +459,15 @@
             tb.SelectAll();
         }
 
+        /// <summary>
+        /// The text box got mouse capture.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void TextBoxGotMouseCapture(object sender, MouseEventArgs e)
         {
             var tb = sender as TextBox;
@@ -303,6 +475,15 @@
             tb.SelectAll();
         }
 
+        /// <summary>
+        /// The text box key down.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void TextBoxKeyDown(object sender, KeyEventArgs e)
         {
             var tb = sender as TextBox;
@@ -319,6 +500,15 @@
             }
         }
 
+        /// <summary>
+        /// The text box lost focus.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void TextBoxLostFocus(object sender, RoutedEventArgs e)
         {
             var tb = sender as TextBox;
@@ -327,6 +517,15 @@
             tb.Cursor = Cursors.Arrow;
         }
 
+        /// <summary>
+        /// The text box mouse double click.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void TextBoxMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             var tb = sender as TextBox;
@@ -339,6 +538,15 @@
             }
         }
 
+        /// <summary>
+        /// The text box mouse down.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void TextBoxMouseDown(object sender, MouseButtonEventArgs e)
         {
             var tb = (dynamic)sender;
@@ -350,6 +558,15 @@
             }
         }
 
+        /// <summary>
+        /// The window loaded.
+        /// </summary>
+        /// <param name="sender">
+        /// The sender.
+        /// </param>
+        /// <param name="e">
+        /// The e.
+        /// </param>
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             CustomCommands.SaveCommand.InputGestures.Add(new KeyGesture(Key.S, ModifierKeys.Control));
@@ -359,80 +576,67 @@
 
             CustomCommands.OpenCommand.InputGestures.Add(new KeyGesture(Key.O, ModifierKeys.Control));
 
-            campaign.Overlord = new OverlordCharacter()
-            {
-                OverlordClassAbilities = new ObservableCollection<OverlordClassAbility>(),
-                OverlordRelics = new ObservableCollection<OverlordRelic>(),
-                UnspentExp = 0
-            };
-            campaign.UnspentPlayerGold = 0;
-            campaign.Players = new ObservableCollection<Hero>();
+            this.campaign.Overlord = new OverlordCharacter()
+                {
+                    OverlordClassAbilities = new ObservableCollection<OverlordClassAbility>(), 
+                    OverlordRelics = new ObservableCollection<OverlordRelic>(), 
+                    UnspentExp = 0
+                };
+            this.campaign.UnspentPlayerGold = 0;
+            this.campaign.Players = new ObservableCollection<Hero>();
 
-            File.ReadLines(@"Data\ShopItems.csv")
-                .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
-                .MapCsvUsingHeader().Into<ShopItem>()
-                .ToList()
-                .ForEach(item =>
+            File.ReadLines(@"Data\ShopItems.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
+                MapCsvUsingHeader().Into<ShopItem>().ToList().ForEach(
+                    item =>
                         {
                             MyResources.shopItems.Add(item);
                             MyResources.allSearchableItems.Add(item);
                         });
-            File.ReadLines(@"Data\Characters.csv")
-                .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
-                .MapCsvUsingHeader().Into<DescentCharacter>()
-                .ToList()
-                .ForEach(item => MyResources.descentCharacters.Add(item));
+            File.ReadLines(@"Data\Characters.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
+                MapCsvUsingHeader().Into<DescentCharacter>().ToList().ForEach(
+                    item => MyResources.descentCharacters.Add(item));
 
-            File.ReadLines(@"Data\ClassAbilities.csv")
-                .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
-                .MapCsvUsingHeader()
-                .Into<ClassAbility>()
-                .ToList()
-                .ForEach(item =>
+            File.ReadLines(@"Data\ClassAbilities.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
+                MapCsvUsingHeader().Into<ClassAbility>().ToList().ForEach(
+                    item =>
                         {
                             MyResources.classAbilities.Add(item);
                             MyResources.allSearchableItems.Add(item);
                         });
-            File.ReadLines(@"Data\PlayerRelics.csv")
-                .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
-                .MapCsvUsingHeader()
-                .Into<PlayerRelic>()
-                .ToList()
-                .ForEach(item =>
+            File.ReadLines(@"Data\PlayerRelics.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
+                MapCsvUsingHeader().Into<PlayerRelic>().ToList().ForEach(
+                    item =>
                         {
                             MyResources.playerRelics.Add(item);
                             MyResources.allSearchableItems.Add(item);
                         });
-            File.ReadLines(@"Data\OverlordRelics.csv")
-                .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
-                .MapCsvUsingHeader()
-                .Into<OverlordRelic>()
-                .ToList()
-                .ForEach(item =>
-                {
-                    MyResources.overlordRelics.Add(item);
-                    MyResources.overlordSearchableItems.Add(item);
-                });
-            File.ReadLines(@"Data\OverlordAbilites.csv")
-                .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
-                .MapCsvUsingHeader()
-                .Into<OverlordClassAbility>()
-                .ToList()
-                .ForEach(item =>
-                {
-                    MyResources.overlordClassAbilities.Add(item);
-                    MyResources.overlordSearchableItems.Add(item);
-                });
-            File.ReadLines(@"Data\SearchCardItems.csv")
-                .Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray())
-                .MapCsvUsingHeader()
-                .Into<SearchCardItem>()
-                .ToList()
-                .ForEach(item =>
+            File.ReadLines(@"Data\OverlordRelics.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
+                MapCsvUsingHeader().Into<OverlordRelic>().ToList().ForEach(
+                    item =>
+                        {
+                            MyResources.overlordRelics.Add(item);
+                            MyResources.overlordSearchableItems.Add(item);
+                        });
+            File.ReadLines(@"Data\OverlordAbilites.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
+                MapCsvUsingHeader().Into<OverlordClassAbility>().ToList().ForEach(
+                    item =>
+                        {
+                            MyResources.overlordClassAbilities.Add(item);
+                            MyResources.overlordSearchableItems.Add(item);
+                        });
+            File.ReadLines(@"Data\SearchCardItems.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
+                MapCsvUsingHeader().Into<SearchCardItem>().ToList().ForEach(
+                    item =>
                         {
                             MyResources.searchCards.Add(item);
                             MyResources.allSearchableItems.Add(item);
                         });
+            File.ReadLines(@"Data\Scenario.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
+                MapCsvUsingHeader().Into<Scenario>().ToList().ForEach(
+                    item => MyResources.scenarios.Add(item));
+
+            campaign.Scenarios = MyResources.scenarios;
+
 
             MyResources.itemNames = MyResources.shopItems.Select(x => x.Name).ToList();
             for (int i = 1; i <= 4; i++)
@@ -441,7 +645,7 @@
                     new Hero
                         {
                             Name = "Hero " + i, 
-                            CurrentFatigue = 0, 
+                            CurrentFatigue = 0,
                             CurrentHealth = 0, 
                             ShopItems = new ObservableCollection<ShopItem>(), 
                             SearchCardItems = new ObservableCollection<SearchCardItem>(), 
@@ -449,13 +653,19 @@
                             ClassAbilites = new ObservableCollection<ClassAbility>()
                         });
             }
-
             this.SetCampaign(this.campaign);
+        }
+
+        void ExpRecalculation(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            this.campaign.RecalculateExperience();
         }
 
         #endregion
 
-
-
+        private void DataGrid_CurrentCellChanged(object sender, EventArgs e)
+        {
+            this.campaign.RecalculateExperience();
+        }
     }
 }

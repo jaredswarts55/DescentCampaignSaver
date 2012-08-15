@@ -1,4 +1,4 @@
-namespace DescentCampaignSaver.Descent.Characters
+namespace DescentCampaignSaver.Descent.Heroes
 {
     /// <summary>
     /// The character classes.

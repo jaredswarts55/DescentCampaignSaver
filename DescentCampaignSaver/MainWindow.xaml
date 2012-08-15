@@ -5,7 +5,9 @@
         xmlns:my="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls.Input.Toolkit"
         Title="Untitled.d2e - Descent 2nd Edition Campaign Saver" Height="768" Width="1024" Loaded="WindowLoaded"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008" mc:Ignorable="d">
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:Heroes="clr-namespace:DescentCampaignSaver.Descent.Heroes"
+        xmlns:Overlord="clr-namespace:DescentCampaignSaver.Descent.Overlord" mc:Ignorable="d">
     <Window.Resources>
         <Style x:Key="myListboxStyle">
             <Style.Resources>
@@ -47,6 +49,10 @@
 
                         </StackPanel>
                         <StackPanel Orientation="Vertical">
+
+
+                            <Label Content="Scenarios" Width="100px" HorizontalAlignment="Left" FontWeight="Bold"/>
+                            <DataGrid CurrentCellChanged="DataGrid_CurrentCellChanged" ItemsSource="{Binding Path=Scenarios}" CanUserAddRows="False" AutoGeneratingColumn="DataGridAutoGeneratingColumn"  />
                             <Label Content="Notes" Width="100px" HorizontalAlignment="Left" FontWeight="Bold"/>
                             <TextBox Text="{Binding Path=Notes}" AcceptsReturn="True" Height="40px"
                        GotMouseCapture="TextBoxGotMouseCapture" GotKeyboardFocus="TextBoxClearOnFocus" />
@@ -54,7 +60,8 @@
 
                     </StackPanel>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type dcDescent:OverlordCharacter}">
+
+                <DataTemplate DataType="{x:Type Overlord:OverlordCharacter}">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <Label Content="Overlord Unspent Exp: " HorizontalAlignment="Left" Width="150px" FontWeight="Bold" Margin="0 0 0 5" />
@@ -98,7 +105,8 @@
                         </ScrollViewer>
                     </StackPanel>
                 </DataTemplate>
-                <DataTemplate DataType="{x:Type dcDescent:Hero}">
+
+                <DataTemplate DataType="{x:Type Heroes:Hero}">
                     <StackPanel Orientation="Vertical">
                         <StackPanel Orientation="Horizontal">
                             <Label Content="CurrentHealth: " Width="100px" />
@@ -108,7 +116,7 @@
                             <TextBox Text="{Binding Path=CurrentFatigue}" Height="20px" Width="100px"
                        GotMouseCapture="TextBoxGotMouseCapture" GotKeyboardFocus="TextBoxClearOnFocus" />
                             <Label Content="Unspent Exp: " Width="100px" Margin="30 0 0 5" />
-                            <TextBox Text="{Binding Path=UnspentExp}" Height="20px" Width="100px"
+                            <TextBox IsEnabled="False" Text="{Binding Path=UnspentExp}" Height="20px" Width="100px"
                        GotMouseCapture="TextBoxGotMouseCapture" GotKeyboardFocus="TextBoxClearOnFocus" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal">
@@ -155,7 +163,7 @@
                         </my:AutoCompleteBox>
                         <Label Content="Class Abilities" FontWeight="Bold" Margin="0 2 0 0" />
                         <DataGrid CanUserAddRows="False" Height="Auto" ItemsSource="{Binding Path=ClassAbilites}"
-                      AutoGeneratingColumn="DataGridAutoGeneratingColumn" />
+                      AutoGeneratingColumn="DataGridAutoGeneratingColumn"/>
                         <Label Content="Shop Items" FontWeight="Bold" Margin="0 2 0 0" />
                         <DataGrid CanUserAddRows="False" Height="Auto" ItemsSource="{Binding Path=ShopItems}"
                       AutoGeneratingColumn="DataGridAutoGeneratingColumn" />
@@ -169,13 +177,13 @@
                 </DataTemplate>
             </TabControl.Resources>
             <TabControl.ItemTemplate>
-                <DataTemplate DataType="dcDescent:Hero">
+                <DataTemplate DataType="dcDescent:Descent.Shared.ITabular">
                     <StackPanel Orientation="Horizontal">
                         <Image Source="{Binding Path=Image}" Width="20px" Height="20px"/>
                         <TextBox Text="{Binding Path=Name}" Cursor="Arrow" BorderThickness="0" Background="Transparent"
                      IsReadOnly="True" IsReadOnlyCaretVisible="False" KeyDown="TextBoxKeyDown" LostFocus="TextBoxLostFocus"
                      PreviewMouseDoubleClick="TextBoxMouseDoubleClick" PreviewMouseDown="TextBoxMouseDown" />
-                        <Button Content="X" Click="ButtonClick" Height="20px" />
+                        <Button Content="X" Click="ButtonClick" Height="20px" Visibility="{Binding Path=IsClosable}" />
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>

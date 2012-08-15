@@ -62,23 +62,26 @@
     </ApplicationDefinition>
     <Compile Include="CustomCommands.cs" />
     <Compile Include="Descent\DescentCampaign.cs" />
-    <Compile Include="Descent\Characters\ArchTypes.cs" />
-    <Compile Include="Descent\Characters\CharacterClasses.cs" />
-    <Compile Include="Descent\Characters\ClassAbility.cs" />
-    <Compile Include="Descent\DiceMappingConverter.cs" />
-    <Compile Include="Descent\GameTypes.cs" />
-    <Compile Include="Descent\OverlordAbilityTypes.cs" />
-    <Compile Include="Descent\OverlordCategoryType.cs" />
-    <Compile Include="Descent\OverlordCharacter.cs" />
-    <Compile Include="Descent\OverlordClassAbility.cs" />
-    <Compile Include="Descent\ITabular.cs" />
+    <Compile Include="Descent\Heroes\ArchTypes.cs" />
+    <Compile Include="Descent\Heroes\CharacterClasses.cs" />
+    <Compile Include="Descent\Heroes\ClassAbility.cs" />
+    <Compile Include="Descent\Other\DiceMappingConverter.cs" />
+    <Compile Include="Descent\Scenario\ScenarioTypes.cs" />
+    <Compile Include="Descent\Scenario\TiedCondition.cs" />
+    <Compile Include="Descent\Shared\GameTypes.cs" />
+    <Compile Include="Descent\Overlord\OverlordAbilityTypes.cs" />
+    <Compile Include="Descent\Overlord\OverlordCategoryType.cs" />
+    <Compile Include="Descent\Overlord\OverlordCharacter.cs" />
+    <Compile Include="Descent\Overlord\OverlordClassAbility.cs" />
+    <Compile Include="Descent\Shared\ITabular.cs" />
     <Compile Include="Descent\Relics\OverlordRelic.cs" />
     <Compile Include="Descent\Relics\PlayerRelic.cs" />
-    <Compile Include="Descent\PlayerSerializer.cs" />
-    <Compile Include="Descent\Characters\DescentCharacter.cs" />
-    <Compile Include="Descent\Hero.cs" />
-    <Compile Include="Descent\ISearchable.cs" />
-    <Compile Include="Descent\ItemTypes.cs" />
+    <Compile Include="Descent\Other\PlayerSerializer.cs" />
+    <Compile Include="Descent\Heroes\DescentCharacter.cs" />
+    <Compile Include="Descent\Heroes\Hero.cs" />
+    <Compile Include="Descent\Shared\ISearchable.cs" />
+    <Compile Include="Descent\Shared\ItemTypes.cs" />
+    <Compile Include="Descent\Scenario\Scenario.cs" />
     <Compile Include="Descent\SearchItems\SearchCardItem.cs" />
     <Compile Include="Descent\Shop\AttackTypes.cs" />
     <Compile Include="Descent\Shop\Die.cs" />
@@ -132,6 +135,9 @@
     <None Include="Data\PlayerRelics.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Data\Scenario.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Data\SearchCardItems.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -168,6 +174,7 @@
   <ItemGroup>
     <Resource Include="Data\UIImages\overlordIcon.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

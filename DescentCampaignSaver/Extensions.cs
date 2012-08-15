@@ -1,4 +1,4 @@
-﻿namespace Mapping
+﻿namespace DescentCampaignSaver
 {
     using System;
     using System.Collections.Generic;
@@ -13,10 +13,16 @@
     /// </summary>
     public class TypeConversionMethodAttribute : Attribute
     {
+        #region Fields
+
         /// <summary>
         /// The converter.
         /// </summary>
         private readonly IMappingConverter converter;
+
+        #endregion
+
+        #region Constructors and Destructors
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TypeConversionMethodAttribute"/> class.
@@ -31,13 +37,17 @@
         {
             if (typeof(IMappingConverter).IsAssignableFrom(t))
             {
-                converter = Activator.CreateInstance(t) as IMappingConverter;
+                this.converter = Activator.CreateInstance(t) as IMappingConverter;
             }
             else
             {
                 throw new Exception("Invalid IMappingConverter");
             }
         }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// The parse.
@@ -50,8 +60,10 @@
         /// </returns>
         public object Parse(string item)
         {
-            return converter.ConversionMethod(item);
+            return this.converter.ConversionMethod(item);
         }
+
+        #endregion
     }
 
     /// <summary>
@@ -59,6 +71,8 @@
     /// </summary>
     public interface IMappingConverter
     {
+        #region Public Methods and Operators
+
         /// <summary>
         /// The conversion method.
         /// </summary>
@@ -69,6 +83,8 @@
         /// The System.Object.
         /// </returns>
         object ConversionMethod(string item);
+
+        #endregion
     }
 
     /// <summary>
@@ -76,42 +92,126 @@
     /// </summary>
     public static class Extensions
     {
+        #region Public Methods and Operators
+
         /// <summary>
-        /// Maps an enumerable of enumerable of paired values to a Key / Value to allow settings properties via reflection in another object.
+        /// Uses each ReflectionInfo in the enumerable to generate an instance of the set type populating the data using reflection.
         /// </summary>
-        /// <typeparam name="TReflected">
-        /// Enumerable of Enumerable of value pairs
+        /// <typeparam name="T">
+        /// Object Type to create and populate
         /// </typeparam>
-        /// <typeparam name="TKey">
-        /// The Property Name selector type
-        /// </typeparam>
-        /// <typeparam name="TValue">
-        /// The Value selector type
-        /// </typeparam>
-        /// <param name="toMap">
-        /// Enumerable of value pairs
+        /// <param name="reflectedArray">
+        /// IEnumerable of ReflectionInfo Key/Value Set
         /// </param>
-        /// <param name="keySelector">
-        /// Selector for Property Name
-        /// </param>
-        /// <param name="valueSelector">
-        /// Selector for Value
+        /// <param name="bindingFlags">
         /// </param>
         /// <returns>
-        /// The Mapping.Extensions+ReflectionInfo.
+        /// Enumerable of newly created instances of T
         /// </returns>
-        public static ReflectionInfo MapSingle<TReflected, TKey, TValue>(
-            this IEnumerable<TReflected> toMap, 
-            Func<TReflected, TKey> keySelector, 
-            Func<TReflected, TValue> valueSelector)
+        public static IEnumerable<T> Into<T>(
+            this IEnumerable<ReflectionInfo> reflectedArray, 
+            BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            var reflectInfo = new ReflectionInfo { SourceType = typeof(TReflected) };
-            foreach (TReflected mapValue in toMap)
+            foreach (ReflectionInfo reflect in reflectedArray)
             {
-                reflectInfo.Add(keySelector(mapValue), valueSelector(mapValue));
+                yield return reflect.IntoSingle<T>(bindingFlags);
+            }
+        }
+
+        /// <summary>
+        /// Uses ReflectionInfo to generate an instance of the set type populating the data using reflection.
+        /// </summary>
+        /// <typeparam name="T">
+        /// Object Type to create and populate
+        /// </typeparam>
+        /// <param name="reflectedArray">
+        /// ReflectionInfo Key/Value Set
+        /// </param>
+        /// <param name="bindingFlags">
+        /// BindingFlags in GetProperties Command Defaults to Public
+        /// </param>
+        /// <returns>
+        /// New instance of T
+        /// </returns>
+        public static T IntoSingle<T>(
+            this ReflectionInfo reflectedArray, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
+        {
+            PropertyInfo[] props = typeof(T).GetProperties(bindingFlags);
+            var empty = Activator.CreateInstance<T>();
+            foreach (var reflected in reflectedArray)
+            {
+                PropertyInfo prop = props.FirstOrDefault(x => x.Name == reflected.Key.ToString().Trim());
+                if (prop != null)
+                {
+                    var mappingConverter =
+                        prop.GetCustomAttributes(typeof(TypeConversionMethodAttribute), false).Cast
+                            <TypeConversionMethodAttribute>().FirstOrDefault();
+                    if (mappingConverter != null)
+                    {
+                        prop.SetValue(empty, mappingConverter.Parse(reflected.Value.ToString()), null);
+                    }
+                    else
+                    {
+                        TypeConverter converter = TypeDescriptor.GetConverter(prop.PropertyType);
+                        prop.SetValue(empty, converter.ConvertFrom(reflected.Value), null);
+                    }
+                }
             }
 
-            return reflectInfo;
+            return empty;
+        }
+
+        /// <summary>
+        /// Prints out a reflected or mapped set of data into a single string for logging or debugging purposes.
+        /// </summary>
+        /// <param name="reflected">
+        /// ReflectionInfo Key/Value Set
+        /// </param>
+        /// <returns>
+        /// Formatted string
+        /// </returns>
+        public static string IntoSingleLineString(this ReflectionInfo reflected)
+        {
+            var sb = new StringBuilder();
+            foreach (var pair in reflected)
+            {
+                sb.AppendFormat("{0}: {1}, ", pair.Key, pair.Value);
+            }
+
+            return sb.ToString().Trim(' ', ',');
+        }
+
+        /// <summary>
+        /// Uses each ReflectionInfo in the enumerable to generate a Datatable using the Type name as the table name,
+        /// the properties as columns and the set of property values as rows.
+        /// </summary>
+        /// <param name="reflectedArray">
+        /// IEnumerable of ReflectionInfo Key/Value Set
+        /// </param>
+        /// <returns>
+        /// DataTable populated with a row for each object
+        /// </returns>
+        public static DataTable IntoTable(this IEnumerable<ReflectionInfo> reflectedArray)
+        {
+            var dt = new DataTable(reflectedArray.First().SourceType.Name);
+            foreach (var item in reflectedArray.First())
+            {
+                var dc = new DataColumn(item.Key.ToString(), item.Value.GetType());
+                dt.Columns.Add(dc);
+            }
+
+            foreach (ReflectionInfo rows in reflectedArray)
+            {
+                DataRow dr = dt.NewRow();
+                foreach (var row in rows)
+                {
+                    dr[row.Key.ToString()] = row.Value;
+                }
+
+                dt.Rows.Add(dr);
+            }
+
+            return dt;
         }
 
         /// <summary>
@@ -176,28 +276,41 @@
         }
 
         /// <summary>
-        /// Iterates through the properties in an object and creates a Key / Value set to allow setting properties via reflection in another object.
+        /// Maps an enumerable of enumerable of paired values to a Key / Value to allow settings properties via reflection in another object.
         /// </summary>
-        /// <param name="toReflect">
-        /// Object to reflect
+        /// <typeparam name="TReflected">
+        /// Enumerable of Enumerable of value pairs
+        /// </typeparam>
+        /// <typeparam name="TKey">
+        /// The Property Name selector type
+        /// </typeparam>
+        /// <typeparam name="TValue">
+        /// The Value selector type
+        /// </typeparam>
+        /// <param name="toMap">
+        /// Enumerable of value pairs
         /// </param>
-        /// <param name="bindingFlags">
-        /// BindingFlags in GetProperties Command Defaults to Public
+        /// <param name="keySelector">
+        /// Selector for Property Name
+        /// </param>
+        /// <param name="valueSelector">
+        /// Selector for Value
         /// </param>
         /// <returns>
-        /// ReflectionInfo Key / Value Set
+        /// The Mapping.Extensions+ReflectionInfo.
         /// </returns>
-        public static ReflectionInfo ReflectSingle(
-            this object toReflect, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
+        public static ReflectionInfo MapSingle<TReflected, TKey, TValue>(
+            this IEnumerable<TReflected> toMap, 
+            Func<TReflected, TKey> keySelector, 
+            Func<TReflected, TValue> valueSelector)
         {
-            PropertyInfo[] props = toReflect.GetType().GetProperties(bindingFlags);
-            var rInfo = new ReflectionInfo { SourceType = toReflect.GetType() };
-            foreach (PropertyInfo prop in props)
+            var reflectInfo = new ReflectionInfo { SourceType = typeof(TReflected) };
+            foreach (TReflected mapValue in toMap)
             {
-                rInfo.Add(prop.Name, prop.GetValue(toReflect, new object[] { }));
+                reflectInfo.Add(keySelector(mapValue), valueSelector(mapValue));
             }
 
-            return rInfo;
+            return reflectInfo;
         }
 
         /// <summary>
@@ -224,139 +337,45 @@
         }
 
         /// <summary>
-        /// Uses ReflectionInfo to generate an instance of the set type populating the data using reflection.
+        /// Iterates through the properties in an object and creates a Key / Value set to allow setting properties via reflection in another object.
         /// </summary>
-        /// <typeparam name="T">
-        /// Object Type to create and populate
-        /// </typeparam>
-        /// <param name="reflectedArray">
-        /// ReflectionInfo Key/Value Set
+        /// <param name="toReflect">
+        /// Object to reflect
         /// </param>
         /// <param name="bindingFlags">
         /// BindingFlags in GetProperties Command Defaults to Public
         /// </param>
         /// <returns>
-        /// New instance of T
+        /// ReflectionInfo Key / Value Set
         /// </returns>
-        public static T IntoSingle<T>(
-            this ReflectionInfo reflectedArray, 
-            BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
+        public static ReflectionInfo ReflectSingle(
+            this object toReflect, BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
         {
-            PropertyInfo[] props = typeof(T).GetProperties(bindingFlags);
-            var empty = Activator.CreateInstance<T>();
-            foreach (var reflected in reflectedArray)
+            PropertyInfo[] props = toReflect.GetType().GetProperties(bindingFlags);
+            var rInfo = new ReflectionInfo { SourceType = toReflect.GetType() };
+            foreach (PropertyInfo prop in props)
             {
-                PropertyInfo prop = props.FirstOrDefault(x => x.Name == reflected.Key.ToString().Trim());
-                if (prop != null)
-                {
-                    var mappingConverter =
-                        prop.GetCustomAttributes(typeof(TypeConversionMethodAttribute), false).Cast
-                            <TypeConversionMethodAttribute>().FirstOrDefault();
-                    if (mappingConverter != null)
-                    {
-                        prop.SetValue(empty, mappingConverter.Parse(reflected.Value.ToString()), null);
-                    }
-                    else
-                    {
-                        TypeConverter converter = TypeDescriptor.GetConverter(prop.PropertyType);
-                        prop.SetValue(empty, converter.ConvertFrom(reflected.Value), null);
-                    }
-                }
+                rInfo.Add(prop.Name, prop.GetValue(toReflect, new object[] { }));
             }
 
-            return empty;
+            return rInfo;
         }
 
-        /// <summary>
-        /// Uses each ReflectionInfo in the enumerable to generate an instance of the set type populating the data using reflection.
-        /// </summary>
-        /// <typeparam name="T">
-        /// Object Type to create and populate
-        /// </typeparam>
-        /// <param name="reflectedArray">
-        /// IEnumerable of ReflectionInfo Key/Value Set
-        /// </param>
-        /// <param name="bindingFlags">
-        /// </param>
-        /// <returns>
-        /// Enumerable of newly created instances of T
-        /// </returns>
-        public static IEnumerable<T> Into<T>(
-            this IEnumerable<ReflectionInfo> reflectedArray, 
-            BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance)
-        {
-            foreach (ReflectionInfo reflect in reflectedArray)
-            {
-                yield return reflect.IntoSingle<T>(bindingFlags);
-            }
-        }
-
-        /// <summary>
-        /// Uses each ReflectionInfo in the enumerable to generate a Datatable using the Type name as the table name,
-        /// the properties as columns and the set of property values as rows.
-        /// </summary>
-        /// <param name="reflectedArray">
-        /// IEnumerable of ReflectionInfo Key/Value Set
-        /// </param>
-        /// <returns>
-        /// DataTable populated with a row for each object
-        /// </returns>
-        public static DataTable IntoTable(this IEnumerable<ReflectionInfo> reflectedArray)
-        {
-            var dt = new DataTable(reflectedArray.First().SourceType.Name);
-            foreach (var item in reflectedArray.First())
-            {
-                var dc = new DataColumn(item.Key.ToString(), item.Value.GetType());
-                dt.Columns.Add(dc);
-            }
-
-            foreach (ReflectionInfo rows in reflectedArray)
-            {
-                DataRow dr = dt.NewRow();
-                foreach (var row in rows)
-                {
-                    dr[row.Key.ToString()] = row.Value;
-                }
-
-                dt.Rows.Add(dr);
-            }
-
-            return dt;
-        }
-
-        /// <summary>
-        /// Prints out a reflected or mapped set of data into a single string for logging or debugging purposes.
-        /// </summary>
-        /// <param name="reflected">
-        /// ReflectionInfo Key/Value Set
-        /// </param>
-        /// <returns>
-        /// Formatted string
-        /// </returns>
-        public static string IntoSingleLineString(this ReflectionInfo reflected)
-        {
-            var sb = new StringBuilder();
-            foreach (var pair in reflected)
-            {
-                sb.AppendFormat("{0}: {1}, ", pair.Key, pair.Value);
-            }
-
-            return sb.ToString().Trim(' ', ',');
-        }
-
-        #region Nested type: ReflectionInfo
+        #endregion
 
         /// <summary>
         /// Set of Key/Value pairs
         /// </summary>
         public class ReflectionInfo : Dictionary<object, object>
         {
+            #region Public Properties
+
             /// <summary>
             /// Gets or sets the source type.
             /// </summary>
             public Type SourceType { get; set; }
-        }
 
-        #endregion
+            #endregion
+        }
     }
 }

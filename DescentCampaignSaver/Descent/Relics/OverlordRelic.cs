@@ -2,20 +2,14 @@
 {
     using System.ComponentModel;
 
+    using DescentCampaignSaver.Descent.Shared;
+
     /// <summary>
     /// The overlord relic.
     /// </summary>
     public class OverlordRelic : ISearchable
     {
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the rules.
-        /// </summary>
-        public string Rules { get; set; }
+        #region Public Properties
 
         /// <summary>
         /// Gets or sets the description.
@@ -33,5 +27,17 @@
                 return GameTypes.Relic;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rules.
+        /// </summary>
+        public string Rules { get; set; }
+
+        #endregion
     }
 }

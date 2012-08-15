@@ -1,26 +1,29 @@
-namespace DescentCampaignSaver.Descent
+namespace DescentCampaignSaver.Descent.Overlord
 {
+    /// <summary>
+    /// The overlord category type.
+    /// </summary>
     public enum OverlordCategoryType
     {
         /// <summary>
         /// The basic.
         /// </summary>
-        Basic,
+        Basic, 
 
         /// <summary>
         /// The universal.
         /// </summary>
-        Universal,
+        Universal, 
 
         /// <summary>
         /// The magus.
         /// </summary>
-        Magus,
+        Magus, 
 
         /// <summary>
         /// The warlord.
         /// </summary>
-        Warlord,
+        Warlord, 
 
         /// <summary>
         /// The saboteur.

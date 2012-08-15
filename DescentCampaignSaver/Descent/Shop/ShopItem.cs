@@ -4,7 +4,8 @@
     using System.ComponentModel;
     using System.Diagnostics;
 
-    using Mapping;
+    using DescentCampaignSaver.Descent.Other;
+    using DescentCampaignSaver.Descent.Shared;
 
     /// <summary>
     /// The shop item.
@@ -12,25 +13,7 @@
     [DebuggerDisplay("Name: {Name} Cost: {Cost}")]
     public class ShopItem : ISearchable
     {
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the cost.
-        /// </summary>
-        public int Cost { get; set; }
-
-        /// <summary>
-        /// Gets or sets the quantity.
-        /// </summary>
-        public int Quantity { get; set; }
-
-        /// <summary>
-        /// Gets or sets the equip.
-        /// </summary>
-        public EquipType Equip { get; set; }
+        #region Public Properties
 
         /// <summary>
         /// Gets or sets the attack type.
@@ -38,22 +21,9 @@
         public AttackTypes AttackType { get; set; }
 
         /// <summary>
-        /// Gets or sets the dice.
+        /// Gets or sets the cost.
         /// </summary>
-        [TypeConversionMethod(typeof(DiceMappingConverter))]
-        [Browsable(false)]
-        public List<Die> Dice { get; set; }
-
-        /// <summary>
-        /// Gets or sets the item type.
-        /// </summary>
-        public ItemTypes ItemType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the rules.
-        /// </summary>
-        [Browsable(false)]
-        public string Rules { get; set; }
+        public int Cost { get; set; }
 
         /// <summary>
         /// Gets the description.
@@ -63,9 +33,21 @@
         {
             get
             {
-                return string.Format("ItemType: {0}\tCost: {1}", ItemType, Cost);
+                return string.Format("ItemType: {0}\tCost: {1}", this.ItemType, this.Cost);
             }
         }
+
+        /// <summary>
+        /// Gets or sets the dice.
+        /// </summary>
+        [TypeConversionMethod(typeof(DiceMappingConverter))]
+        [Browsable(false)]
+        public List<Die> Dice { get; set; }
+
+        /// <summary>
+        /// Gets or sets the equip.
+        /// </summary>
+        public EquipType Equip { get; set; }
 
         /// <summary>
         /// Gets the game type.
@@ -78,5 +60,28 @@
                 return GameTypes.ShopItem;
             }
         }
+
+        /// <summary>
+        /// Gets or sets the item type.
+        /// </summary>
+        public ItemTypes ItemType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the quantity.
+        /// </summary>
+        public int Quantity { get; set; }
+
+        /// <summary>
+        /// Gets or sets the rules.
+        /// </summary>
+        [Browsable(false)]
+        public string Rules { get; set; }
+
+        #endregion
     }
 }

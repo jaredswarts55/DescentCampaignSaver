@@ -1,15 +1,25 @@
-﻿namespace DescentCampaignSaver.Descent.SearchItems
+namespace DescentCampaignSaver.Descent.Heroes
 {
     using System.ComponentModel;
 
     using DescentCampaignSaver.Descent.Shared;
 
     /// <summary>
-    /// The search card item.
+    /// The class ability.
     /// </summary>
-    public class SearchCardItem : ISearchable
+    public class ClassAbility : ISearchable
     {
         #region Public Properties
+
+        /// <summary>
+        /// Gets or sets the arch type.
+        /// </summary>
+        public ArchTypes ArchType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the class.
+        /// </summary>
+        public CharacterClasses Class { get; set; }
 
         /// <summary>
         /// Gets the description.
@@ -19,9 +29,14 @@
         {
             get
             {
-                return string.Format("ItemType: {0}\tValue: {1}", this.SearchItemType, this.Value);
+                return string.Format("Class: {0}\tExp Cost: {1}", this.Class, this.ExpCost);
             }
         }
+
+        /// <summary>
+        /// Gets or sets the exp cost.
+        /// </summary>
+        public int ExpCost { get; set; }
 
         /// <summary>
         /// Gets the game type.
@@ -31,7 +46,7 @@
         {
             get
             {
-                return GameTypes.SearchCard;
+                return GameTypes.ClassCard;
             }
         }
 
@@ -39,22 +54,6 @@
         /// Gets or sets the name.
         /// </summary>
         public string Name { get; set; }
-
-        /// <summary>
-        /// Gets or sets the rules.
-        /// </summary>
-        [Browsable(false)]
-        public string Rules { get; set; }
-
-        /// <summary>
-        /// Gets or sets the search item type.
-        /// </summary>
-        public ItemTypes SearchItemType { get; set; }
-
-        /// <summary>
-        /// Gets or sets the value.
-        /// </summary>
-        public int Value { get; set; }
 
         #endregion
     }

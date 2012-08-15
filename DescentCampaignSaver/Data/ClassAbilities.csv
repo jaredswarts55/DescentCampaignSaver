@@ -1,4 +1,4 @@
-Name,Exp Cost,Class,ArchType,ItemType,Rules
+Name,ExpCost,Class,ArchType,ItemType,Rules
 Stalwart,3,Knight,Warrior,Ability,
 Inspiration,3,Knight,Warrior,Ability,
 Shield Slam,2,Knight,Warrior,Ability,

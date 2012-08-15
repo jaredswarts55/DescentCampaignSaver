@@ -7,10 +7,12 @@
     /// </summary>
     internal class CustomCommands
     {
+        #region Static Fields
+
         /// <summary>
-        /// The save command.
+        /// The open command.
         /// </summary>
-        public static RoutedCommand SaveCommand = new RoutedCommand();
+        public static RoutedCommand OpenCommand = new RoutedCommand();
 
         /// <summary>
         /// The save as command.
@@ -18,8 +20,10 @@
         public static RoutedCommand SaveAsCommand = new RoutedCommand();
 
         /// <summary>
-        /// The open command.
+        /// The save command.
         /// </summary>
-        public static RoutedCommand OpenCommand = new RoutedCommand();
+        public static RoutedCommand SaveCommand = new RoutedCommand();
+
+        #endregion
     }
 }

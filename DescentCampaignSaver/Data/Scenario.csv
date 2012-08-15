@@ -1,0 +1,21 @@
+Id,Name,Act,Parent,Condition,ScenarioType
+1,First Blood,0,,None,Intro
+2,A Fat Goblin,1,,None,Scenario
+3,The Monster's Hoard,2,2,Win,Scenario
+4,The Frozen Spire,2,2,Loss,Scenario
+5,Castle Daerion,1,,None,Scenario
+6,The Dawnblade,2,5,Win,Scenario
+7,The Desecrated Tomb,2,5,Loss,Scenario
+8,The Cardinal's Plight,1,,None,Scenario
+9,Enuring The Elements,2,8,Win,Scenario
+10,The Ritual Of Shadows,2,8,Loss,Scenario
+11,The Masquerade Ball,1,,None,Scenario
+12,Blood Of Heroes,2,11,Win,Scenario
+13,The Twin Idols,2,11,Loss,Scenario
+14,Death on the Wing,1,,None,Scenario
+15,The Wyrm Turns,2,14,Win,Scenario
+16,The Wyrm Rises,2,14,Loss,Scenario
+17,The Shadow Vault,,,Win,Interlude
+18,The Overlord Revealed,,,Loss,Interlude
+19,Gryvorn Unleashed,,,Win,Finale
+20,The Man Who Would Be King,,,Loss,Finale

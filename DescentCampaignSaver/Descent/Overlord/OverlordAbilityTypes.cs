@@ -1,16 +1,19 @@
-namespace DescentCampaignSaver.Descent
+namespace DescentCampaignSaver.Descent.Overlord
 {
+    /// <summary>
+    /// The overlord ability types.
+    /// </summary>
     public enum OverlordAbilityTypes
     {
         /// <summary>
         /// The trap.
         /// </summary>
-        Trap,
+        Trap, 
 
         /// <summary>
         /// The event.
         /// </summary>
-        Event,
+        Event, 
 
         /// <summary>
         /// The magic.

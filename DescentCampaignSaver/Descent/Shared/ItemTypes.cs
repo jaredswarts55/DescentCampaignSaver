@@ -1,4 +1,4 @@
-namespace DescentCampaignSaver.Descent
+namespace DescentCampaignSaver.Descent.Shared
 {
     /// <summary>
     /// The item types.

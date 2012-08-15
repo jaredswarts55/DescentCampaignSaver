@@ -1,14 +1,11 @@
-namespace DescentCampaignSaver.Descent.Characters
+namespace DescentCampaignSaver.Descent.Heroes
 {
     /// <summary>
     /// The descent character.
     /// </summary>
     public class DescentCharacter
     {
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        public string Name { get; set; }
+        #region Public Properties
 
         /// <summary>
         /// Gets or sets the arch type.
@@ -16,19 +13,9 @@ namespace DescentCampaignSaver.Descent.Characters
         public ArchTypes ArchType { get; set; }
 
         /// <summary>
-        /// Gets or sets the speed.
+        /// Gets or sets the awareness.
         /// </summary>
-        public int Speed { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max health.
-        /// </summary>
-        public int MaxHealth { get; set; }
-
-        /// <summary>
-        /// Gets or sets the max fatigue.
-        /// </summary>
-        public int MaxFatigue { get; set; }
+        public int Awareness { get; set; }
 
         /// <summary>
         /// Gets or sets the defense.
@@ -36,9 +23,19 @@ namespace DescentCampaignSaver.Descent.Characters
         public string Defense { get; set; }
 
         /// <summary>
-        /// Gets or sets the will.
+        /// Gets or sets the knowledge.
         /// </summary>
-        public int Will { get; set; }
+        public int Knowledge { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max fatigue.
+        /// </summary>
+        public int MaxFatigue { get; set; }
+
+        /// <summary>
+        /// Gets or sets the max health.
+        /// </summary>
+        public int MaxHealth { get; set; }
 
         /// <summary>
         /// Gets or sets the might.
@@ -46,14 +43,23 @@ namespace DescentCampaignSaver.Descent.Characters
         public int Might { get; set; }
 
         /// <summary>
-        /// Gets or sets the knowledge.
+        /// Gets or sets the name.
         /// </summary>
-        public int Knowledge { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
-        /// Gets or sets the awareness.
+        /// Gets or sets the speed.
         /// </summary>
-        public int Awareness { get; set; }
+        public int Speed { get; set; }
+
+        /// <summary>
+        /// Gets or sets the will.
+        /// </summary>
+        public int Will { get; set; }
+
+        #endregion
+
+        #region Public Methods and Operators
 
         /// <summary>
         /// The equals.
@@ -81,5 +87,7 @@ namespace DescentCampaignSaver.Descent.Characters
 
             return base.Equals(obj);
         }
+
+        #endregion
     }
 }
