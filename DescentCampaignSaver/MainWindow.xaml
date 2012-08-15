@@ -49,8 +49,6 @@
 
                         </StackPanel>
                         <StackPanel Orientation="Vertical">
-
-
                             <Label Content="Scenarios" Width="100px" HorizontalAlignment="Left" FontWeight="Bold"/>
                             <DataGrid CurrentCellChanged="DataGrid_CurrentCellChanged" ItemsSource="{Binding Path=Scenarios}" CanUserAddRows="False" AutoGeneratingColumn="DataGridAutoGeneratingColumn"  />
                             <Label Content="Notes" Width="100px" HorizontalAlignment="Left" FontWeight="Bold"/>

@@ -37,7 +37,8 @@
                         typeof(ObservableCollection<Hero>), typeof(DescentCampaign), typeof(OverlordCharacter), 
                         typeof(OverlordClassAbility), typeof(ObservableCollection<OverlordClassAbility>), 
                         typeof(OverlordRelic), typeof(ShopItem), typeof(PlayerRelic), typeof(ClassAbility), 
-                        typeof(SearchCardItem), typeof(Hero), typeof(DescentCharacter)
+                        typeof(SearchCardItem), typeof(Hero), typeof(DescentCharacter),typeof(Scenario.Scenario),
+                        typeof(Scenario.ScenarioTypes),typeof(Scenario.TiedCondition)
                     });
             using (var sr = new FileStream(path, FileMode.Open, FileAccess.Read))
             using (var cr = new GZipStream(sr, CompressionMode.Decompress))
@@ -66,10 +67,11 @@
                     typeof(DescentCampaign), 
                     new[]
                         {
-                            typeof(ObservableCollection<Hero>), typeof(DescentCampaign), typeof(OverlordCharacter), 
-                            typeof(OverlordClassAbility), typeof(ObservableCollection<OverlordClassAbility>), 
-                            typeof(OverlordRelic), typeof(ShopItem), typeof(PlayerRelic), typeof(ClassAbility), 
-                            typeof(SearchCardItem), typeof(Hero), typeof(DescentCharacter)
+                        typeof(ObservableCollection<Hero>), typeof(DescentCampaign), typeof(OverlordCharacter), 
+                        typeof(OverlordClassAbility), typeof(ObservableCollection<OverlordClassAbility>), 
+                        typeof(OverlordRelic), typeof(ShopItem), typeof(PlayerRelic), typeof(ClassAbility), 
+                        typeof(SearchCardItem), typeof(Hero), typeof(DescentCharacter),typeof(Scenario.Scenario),
+                        typeof(Scenario.ScenarioTypes),typeof(Scenario.TiedCondition)
                         });
                 xsr.Serialize(cw, campaign);
             }

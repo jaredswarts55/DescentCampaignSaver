@@ -209,9 +209,8 @@
         /// </param>
         private void ButtonClick(object sender, RoutedEventArgs e)
         {
-            var tb = (dynamic)sender;
-            dynamic p1 = tb.Parent.TemplatedParent.Parent.Parent.TemplatedParent.Content;
-            this.campaign.Players.Remove(p1);
+            Hero p2 = ((Button)sender).DataContext as Hero;
+            this.campaign.Players.Remove(p2);
             this.SetCampaign(this.campaign);
         }
 
@@ -549,11 +548,13 @@
         /// </param>
         private void TextBoxMouseDown(object sender, MouseButtonEventArgs e)
         {
-            var tb = (dynamic)sender;
             var tBox = sender as TextBox;
             if (tBox.IsReadOnly)
             {
-                var tbItem = tb.Parent.TemplatedParent.Parent.Parent.TemplatedParent as TabItem;
+                var tab = (DependencyObject)tBox;
+                while (!(tab is TabItem))
+                    tab = VisualTreeHelper.GetParent(tab);
+                var tbItem = tab as TabItem;
                 tbItem.Focus();
             }
         }
@@ -631,9 +632,10 @@
                             MyResources.searchCards.Add(item);
                             MyResources.allSearchableItems.Add(item);
                         });
-            File.ReadLines(@"Data\Scenario.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
-                MapCsvUsingHeader().Into<Scenario>().ToList().ForEach(
-                    item => MyResources.scenarios.Add(item));
+            var scens = File.ReadLines(@"Data\Scenario.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
+                MapCsvUsingHeader().Into<Scenario>();
+           scens.Where(x => x.Act != null).OrderBy(x => x.Act).ThenBy(x=>x.Id).Union(scens
+                .Where(x => x.Act == null)).ToList().ForEach(item => MyResources.scenarios.Add(item));
 
             campaign.Scenarios = MyResources.scenarios;
 
