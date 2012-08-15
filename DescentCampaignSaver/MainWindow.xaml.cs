@@ -634,8 +634,8 @@
                         });
             var scens = File.ReadLines(@"Data\Scenario.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
                 MapCsvUsingHeader().Into<Scenario>();
-           scens.Where(x => x.Act != null).OrderBy(x => x.Act).ThenBy(x=>x.Id).Union(scens
-                .Where(x => x.Act == null)).ToList().ForEach(item => MyResources.scenarios.Add(item));
+            scens.Where(x => x.Act != null).OrderBy(x => x.Act).ThenBy(x => x.Id).Union(scens.Where(x => x.Act == null))
+                .ToList().ForEach(item => MyResources.scenarios.Add(item));
 
             campaign.Scenarios = MyResources.scenarios;
 
