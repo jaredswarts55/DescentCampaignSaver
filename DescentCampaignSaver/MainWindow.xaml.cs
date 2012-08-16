@@ -587,53 +587,53 @@
             this.campaign.Players = new ObservableCollection<Hero>();
 
             File.ReadLines(@"Data\ShopItems.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
-                MapCsvUsingHeader().Into<ShopItem>().ToList().ForEach(
+                MapArrayUsingHeader().Into<ShopItem>().ToList().ForEach(
                     item =>
                         {
                             MyResources.shopItems.Add(item);
                             MyResources.allSearchableItems.Add(item);
                         });
             File.ReadLines(@"Data\Characters.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
-                MapCsvUsingHeader().Into<DescentCharacter>().ToList().ForEach(
+                MapArrayUsingHeader().Into<DescentCharacter>().ToList().ForEach(
                     item => MyResources.descentCharacters.Add(item));
 
             File.ReadLines(@"Data\ClassAbilities.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
-                MapCsvUsingHeader().Into<ClassAbility>().ToList().ForEach(
+                MapArrayUsingHeader().Into<ClassAbility>().ToList().ForEach(
                     item =>
                         {
                             MyResources.classAbilities.Add(item);
                             MyResources.allSearchableItems.Add(item);
                         });
             File.ReadLines(@"Data\PlayerRelics.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
-                MapCsvUsingHeader().Into<PlayerRelic>().ToList().ForEach(
+                MapArrayUsingHeader().Into<PlayerRelic>().ToList().ForEach(
                     item =>
                         {
                             MyResources.playerRelics.Add(item);
                             MyResources.allSearchableItems.Add(item);
                         });
             File.ReadLines(@"Data\OverlordRelics.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
-                MapCsvUsingHeader().Into<OverlordRelic>().ToList().ForEach(
+                MapArrayUsingHeader().Into<OverlordRelic>().ToList().ForEach(
                     item =>
                         {
                             MyResources.overlordRelics.Add(item);
                             MyResources.overlordSearchableItems.Add(item);
                         });
             File.ReadLines(@"Data\OverlordAbilites.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
-                MapCsvUsingHeader().Into<OverlordClassAbility>().ToList().ForEach(
+                MapArrayUsingHeader().Into<OverlordClassAbility>().ToList().ForEach(
                     item =>
                         {
                             MyResources.overlordClassAbilities.Add(item);
                             MyResources.overlordSearchableItems.Add(item);
                         });
             File.ReadLines(@"Data\SearchCardItems.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
-                MapCsvUsingHeader().Into<SearchCardItem>().ToList().ForEach(
+                MapArrayUsingHeader().Into<SearchCardItem>().ToList().ForEach(
                     item =>
                         {
                             MyResources.searchCards.Add(item);
                             MyResources.allSearchableItems.Add(item);
                         });
             var scens = File.ReadLines(@"Data\Scenario.csv").Select(x => x.Split(',').Select(y => y.Trim('"')).ToArray()).
-                MapCsvUsingHeader().Into<Scenario>();
+                MapArrayUsingHeader().Into<Scenario>();
             scens.Where(x => x.Act != null).OrderBy(x => x.Act).ThenBy(x => x.Id).Union(scens.Where(x => x.Act == null))
                 .ToList().ForEach(item => MyResources.scenarios.Add(item));
 

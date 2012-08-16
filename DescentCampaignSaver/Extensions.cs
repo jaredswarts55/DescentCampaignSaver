@@ -255,7 +255,7 @@
         /// <returns>
         /// The System.Collections.Generic.IEnumerable`1[T -&gt; Mapping.Extensions+ReflectionInfo].
         /// </returns>
-        public static IEnumerable<ReflectionInfo> MapCsvUsingHeader(this IEnumerable<IEnumerable<string>> csvArray)
+        public static IEnumerable<ReflectionInfo> MapArrayUsingHeader(this IEnumerable<IEnumerable<string>> csvArray)
         {
             var csvData = csvArray.ToList();
             var header = csvData.First().ToArray();
