@@ -94,7 +94,7 @@
             if (e.Key == Key.Enter)
             {
                 var aBox = (AutoCompleteBox)sender;
-                Hero hero = this.campaign.Players.FirstOrDefault(x => x.Name == aBox.Tag.ToString());
+                Hero hero = aBox.DataContext as Hero;
                 if (hero != null && aBox.SelectedItem != null)
                 {
                     if (aBox.SelectedItem is ShopItem)
